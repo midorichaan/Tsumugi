@@ -5,6 +5,12 @@ class Button(discord.ui.View):
 
     def __init__(self):
         super().__init__()
+        self.add_item(
+            discord.ui.Button(
+                label="E",
+                url="https://twitter.com/Midorichaan2525"
+            )
+        )
 
     @discord.ui.button(
         label="A",
@@ -49,14 +55,6 @@ class Button(discord.ui.View):
             ephemeral=True
         )
         self.stop()
-
-    @discord.ui.button(
-        label="E",
-        style=discord.ButtonStyle.link,
-        #url="https://twitter.com/Midorichaan2525"
-    )
-    async def _C(self, button, interact):
-        pass
 
 class mido_test(commands.Cog):
 
