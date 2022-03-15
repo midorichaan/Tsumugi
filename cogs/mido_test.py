@@ -21,7 +21,6 @@ class Button(discord.ui.View):
             "A",
             ephemeral=True
         )
-        self.stop()
 
     @discord.ui.button(
         label="B",
@@ -32,7 +31,6 @@ class Button(discord.ui.View):
             "B",
             ephemeral=True
         )
-        self.stop()
 
     @discord.ui.button(
         label="C",
@@ -43,7 +41,6 @@ class Button(discord.ui.View):
             "C",
             ephemeral=True
         )
-        self.stop()
 
     @discord.ui.button(
         label="D",
@@ -54,7 +51,6 @@ class Button(discord.ui.View):
             "D",
             ephemeral=True
         )
-        self.stop()
 
 class mido_test(commands.Cog):
 
