@@ -53,7 +53,7 @@ class Button(discord.ui.View):
     @discord.ui.button(
         label="E",
         style=discord.ButtonStyle.link,
-        url="https://twitter.com/Midorichaan2525"
+        #url="https://twitter.com/Midorichaan2525"
     )
     async def _C(self, button, interact):
         pass
