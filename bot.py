@@ -2,7 +2,9 @@ import discord
 from discord.ext import commands
 
 import os
+import traceback
 from dotenv import load_dotenv
+from lib import utils
 from logging import basicConfig, getLogger, INFO
 
 #load .env
@@ -16,7 +18,12 @@ class TsumugiChan(commands.AutoShardedBot):
 
         self.instance = {
             "shards": {},
-            "session": 0
+            "session": 0,
+            "exception": {
+                "error": None,
+                "traceback": None,
+                "context": None
+            }
         }
 
         self._cogs = [
@@ -118,6 +125,39 @@ class TsumugiChan(commands.AutoShardedBot):
             self.logger.info("Presence changed")
 
         self.logger.info("Enabled tsumugi discordbot")
+
+    #on_command
+    async def on_command(self, ctx):
+        if isinstance(ctx.channel, discord.DMChannel):
+            format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @DM"
+            self.logger.info(format)
+        else:
+            format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @{ctx.channel} ({ctx.channel.id}) - {ctx.guild} ({ctx.guild.id})"
+            self.logger.info(format)
+
+    #on_command_error
+    async def on_command_error(self, ctx, exc):
+        traceback_exc = ''.join(
+            traceback.TracebackException.from_exception(exc).format()
+        )
+        format = ""
+
+        self.instance["exception"] = {
+            "error": exc,
+            "traceback": traceback_exc,
+            "context": ctx
+        }
+
+        if isinstance(ctx.channel, discord.DMChannel):
+            format = f"ERROR: {ctx.author} ({ctx.author.id}) -> {exc} @DM"
+        else:
+            format = f"ERROR: {ctx.author} ({ctx.author.id}) -> {exc} @{ctx.channel} ({ctx.channel.id}) - {ctx.guild} ({ctx.guild.id})"
+
+        self.logger.warning(format)
+        await utils.reply_or_send(
+            ctx,
+            content=f"> エラー \n```py\n{exc}\n```"
+        )
 
 #logger
 basicConfig(
