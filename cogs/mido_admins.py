@@ -25,7 +25,7 @@ class mido_admins(commands.Cog):
     async def _eval(self, ctx, *, code: str=None):
         if not code:
             await ctx.message.add_reaction(self.failed)
-            return await utils.reply_or_send(ctx, content=f"> {d['args-required']}")
+            return await utils.reply_or_send(ctx, content=f"> body is a required arugment that is missing")
 
         env = {
             'bot': self.bot,
@@ -70,7 +70,7 @@ class mido_admins(commands.Cog):
     async def shell(self, ctx, *, command=None):
         if not command:
             await ctx.message.add_reaction(self.failed)
-            return await utils.reply_or_send(ctx, content=f"> {d['args-required']}")
+            return await utils.reply_or_send(ctx, content=f"> command is a required argument that is missing")
 
         stdout, stderr = await utils.run_process(ctx, command)
         if stderr:
