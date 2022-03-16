@@ -1,6 +1,21 @@
 import discord
 from discord.ext import commands
 
+class Modal(discord.ui.Modal, title="Test Modal"):
+    name = discord.ui.TextInput(label="Username", style=discord.TextStyle.paragraph)
+    id = discord.ui.TextInput(label="ID", style=discord.TextStyle.short)
+
+    async def on_submit(self, interact):
+        await interact.response.send_message(
+            "> Modal Submitted"
+        )
+
+class ModalView(discord.ui.View):
+
+    def __init__(self):
+        super().__init__()
+        self.add_item(Modal())
+
 class Button(discord.ui.View):
 
     def __init__(self):
@@ -64,6 +79,17 @@ class mido_test(commands.Cog):
     )
     async def _button(self, ctx):
         await ctx.send("View test", view=Button())
+
+    #modal
+    @commands.command(
+        name="modal",
+        description="Modalのテストコマンド"
+    )
+    async def _modal(self, ctx):
+        modal = ModalView()
+
+        await modal.wait()
+        await ctx.send("Modal test", view=modal)
 
 async def setup(bot):
     await bot.add_cog(mido_test(bot))
