@@ -157,7 +157,7 @@ class TsumugiChan(commands.AutoShardedBot):
                 self.logger.info(f"Cog {i} load")
 
         try:
-            api_status_poster.start()
+            self.api_status_poster.start()
         except Exception as exc:
             self.logger.error(exc)
 
