@@ -1,6 +1,7 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
+import aiohttp
 import os
 import traceback
 from dotenv import load_dotenv
@@ -16,6 +17,7 @@ class TsumugiChan(commands.AutoShardedBot):
         self.logger = kwargs.get("logger", None)
         super().__init__(*args, **kwargs)
 
+        self.session = aiohttp.ClientSession()
         self.instance = {
             "shards": {},
             "session": 0,
@@ -29,6 +31,48 @@ class TsumugiChan(commands.AutoShardedBot):
         self._cogs = [
             "cogs.mido_admins", "jishaku"
         ]
+
+    #api status poster
+    @tasks.loop(minutes=15.0)
+    async def api_status_poster(self):
+        d = {
+            "identity": "tsumugi",
+        }
+
+        if not self.vars["maintenance"]:
+            d["status"] = 2
+
+            try:
+                async with self.session.request(
+                    "POST",
+                    "https://api.midorichan.cf/v1/service/status",
+                    headers={"Authorization": f"Bearer {os.environ['MIDORI_API']}"},
+                    json=d
+                ) as request:
+                    data = await discord.http.json_or_text(request)
+                    if request.status == 200:
+                        self.logger.info(f"API: Updated service status - {data}")
+                    else:
+                        self.logger.warning(f"API: Service status update failed - {data}")
+            except Exception as exc:
+                self.logger.warning(f"ERROR: {exc}")
+        else:
+            d["status"] = 1
+
+            try:
+                async with self.session.request(
+                    "POST",
+                    "https://api.midorichan.cf/v1/service/status",
+                    headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
+                    json=d
+                ) as request:
+                    data = await discord.http.json_or_text(request)
+                    if request.status == 200:
+                        self.logger.info(f"API: Updated service status - {data}")
+                    else:
+                        self.logger.warning(f"API: Service status update failed - {data}")
+            except Exception as exc:
+                self.logger.warning(f"ERROR: {exc}")
 
     #overwrite run
     def run(self) -> None:
@@ -94,7 +138,7 @@ class TsumugiChan(commands.AutoShardedBot):
         self.instance["shards"][shard_id] = 2
 
     #on_resumed
-    async def on_resumed(self):
+    async def on_resumed(self) -> None:
         self.logger.info(
             "Session has resumed"
         )
@@ -113,6 +157,11 @@ class TsumugiChan(commands.AutoShardedBot):
                 self.logger.info(f"Cog {i} load")
 
         try:
+            api_status_poster.start()
+        except Exception as exc:
+            self.logger.error(exc)
+
+        try:
             await self.change_presence(
                 status=discord.Status.online,
                 activity=discord.Game(
@@ -127,7 +176,7 @@ class TsumugiChan(commands.AutoShardedBot):
         self.logger.info("Enabled tsumugi discordbot")
 
     #on_command
-    async def on_command(self, ctx):
+    async def on_command(self, ctx) -> None:
         if isinstance(ctx.channel, discord.DMChannel):
             format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @DM"
             self.logger.info(format)
@@ -136,7 +185,7 @@ class TsumugiChan(commands.AutoShardedBot):
             self.logger.info(format)
 
     #on_command_error
-    async def on_command_error(self, ctx, exc):
+    async def on_command_error(self, ctx, exc) -> None:
         traceback_exc = ''.join(
             traceback.TracebackException.from_exception(exc).format()
         )
