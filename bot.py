@@ -17,7 +17,6 @@ class TsumugiChan(commands.AutoShardedBot):
         self.logger = kwargs.get("logger", None)
         super().__init__(*args, **kwargs)
 
-        self.session = aiohttp.ClientSession()
         self.instance = {
             "shards": {},
             "ready": False,
@@ -41,17 +40,18 @@ class TsumugiChan(commands.AutoShardedBot):
         }
 
         try:
-            async with self.session.request(
-                "POST",
-                "https://api.midorichan.cf/v1/service/status",
-                headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
-                json=d
-            ) as request:
-                data = await discord.http.json_or_text(request)
-                if request.status == 200:
-                    self.logger.info(f"API: Updated service status - {data}")
-                else:
-                    self.logger.warning(f"API: Service status update failed - {data}")
+            async with aiohttp.ClientSession() as session:
+                async with session.request(
+                    "POST",
+                    "https://api.midorichan.cf/v1/service/status",
+                    headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
+                    json=d
+                ) as request:
+                    data = await discord.http.json_or_text(request)
+                    if request.status == 200:
+                        self.logger.info(f"API: Updated service status - {data}")
+                    else:
+                        self.logger.warning(f"API: Service status update failed - {data}")
         except Exception as exc:
             self.logger.warning(f"ERROR: {exc}")
 
