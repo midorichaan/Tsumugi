@@ -20,6 +20,7 @@ class TsumugiChan(commands.AutoShardedBot):
         self.session = aiohttp.ClientSession()
         self.instance = {
             "shards": {},
+            "ready": False,
             "session": 0,
             "exception": {
                 "error": None,
@@ -32,47 +33,35 @@ class TsumugiChan(commands.AutoShardedBot):
             "cogs.mido_admins", "jishaku"
         ]
 
+    #post
+    async def post_api(self, status: int=2):
+        d = {
+            "identity": "tsumugi",
+            "status": status
+        }
+
+        try:
+            async with self.session.request(
+                "POST",
+                "https://api.midorichan.cf/v1/service/status",
+                headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
+                json=d
+            ) as request:
+                data = await discord.http.json_or_text(request)
+                if request.status == 200:
+                    self.logger.info(f"API: Updated service status - {data}")
+                else:
+                    self.logger.warning(f"API: Service status update failed - {data}")
+        except Exception as exc:
+            self.logger.warning(f"ERROR: {exc}")
+
     #api status poster
     @tasks.loop(minutes=15.0)
     async def api_status_poster(self):
-        d = {
-            "identity": "tsumugi",
-        }
-
-        if not self.vars["maintenance"]:
-            d["status"] = 2
-
-            try:
-                async with self.session.request(
-                    "POST",
-                    "https://api.midorichan.cf/v1/service/status",
-                    headers={"Authorization": f"Bearer {os.environ['MIDORI_API']}"},
-                    json=d
-                ) as request:
-                    data = await discord.http.json_or_text(request)
-                    if request.status == 200:
-                        self.logger.info(f"API: Updated service status - {data}")
-                    else:
-                        self.logger.warning(f"API: Service status update failed - {data}")
-            except Exception as exc:
-                self.logger.warning(f"ERROR: {exc}")
+        if self.instance["ready"]:
+            await self.post_api(2)
         else:
-            d["status"] = 1
-
-            try:
-                async with self.session.request(
-                    "POST",
-                    "https://api.midorichan.cf/v1/service/status",
-                    headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
-                    json=d
-                ) as request:
-                    data = await discord.http.json_or_text(request)
-                    if request.status == 200:
-                        self.logger.info(f"API: Updated service status - {data}")
-                    else:
-                        self.logger.warning(f"API: Service status update failed - {data}")
-            except Exception as exc:
-                self.logger.warning(f"ERROR: {exc}")
+            await self.post_api(1)
 
     #overwrite run
     def run(self) -> None:
@@ -147,6 +136,7 @@ class TsumugiChan(commands.AutoShardedBot):
     #on_ready
     async def on_ready(self) -> None:
         self.logger.info(f"Logged in as {self.user}")
+        await self.post_api(1)
 
         for i in self._cogs:
             try:
@@ -173,6 +163,7 @@ class TsumugiChan(commands.AutoShardedBot):
         else:
             self.logger.info("Presence changed")
 
+        self.instance["ready"] = True
         self.logger.info("Enabled tsumugi discordbot")
 
     #on_command
