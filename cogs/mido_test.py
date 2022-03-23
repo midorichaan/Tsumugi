@@ -7,7 +7,7 @@ class Modal(discord.ui.Modal, title="Test Modal"):
 
     async def on_submit(self, interact):
         await interact.response.send_message(
-            "> Modal Submitted"
+            f"> Modal Submitted \n{name}, {id}"
         )
 
 class ModalView(discord.ui.View):
