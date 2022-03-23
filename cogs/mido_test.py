@@ -87,9 +87,8 @@ class mido_test(commands.Cog):
     )
     async def _modal(self, ctx):
         modal = ModalView()
-
-        await modal.wait()
         await ctx.send("Modal test", view=modal)
+        await modal.wait()
 
 async def setup(bot):
     await bot.add_cog(mido_test(bot))
