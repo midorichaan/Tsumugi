@@ -11,6 +11,10 @@ from logging import basicConfig, getLogger, INFO
 #load .env
 load_dotenv()
 
+#environ JISHAKU
+os.environ["NO_UNDERSCORE"] = True
+os.environ["NO_DM_TRACEBACK"] = True
+
 class TsumugiChan(commands.AutoShardedBot):
 
     def __init__(self, *args, **kwargs) -> None:
