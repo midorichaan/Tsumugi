@@ -6,6 +6,7 @@ class Modal(discord.ui.Modal):
     id = discord.ui.TextInput(label="ID", style=discord.TextStyle.short)
 
     def __init__(self):
+        super().__init__()
         self.title = "Test Modal"
 
     async def on_submit(self, interact):
