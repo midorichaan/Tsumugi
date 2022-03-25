@@ -8,7 +8,8 @@ class mido_slash(commands.Cog):
         self.bot = bot
 
     @app_commands.command(
-        description="test slash command"
+        description="test slash command",
+        guild_ids=[discord.Object(701131006698192916)]
     )
     async def ping(self, interact):
         await interact.response.send_message("はろー！")
