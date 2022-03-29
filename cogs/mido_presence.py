@@ -19,7 +19,7 @@ class mido_presence(commands.Cog):
 
         if af.id in self.bot.instance["ids"]:
             if not self._fired.get(af.id, None):
-                self._fired[af.id] = 1
+                self._fired[af.id] = 0
             self._fired[af.id] += 1
             channel = self.bot.get_channel(self.bot.instance["channels"]["presence"])
             e = discord.Embed(
@@ -28,7 +28,7 @@ class mido_presence(commands.Cog):
                 timestamp=datetime.datetime.now()
             )
             e.set_author(name=f"{af} ({af.id})", icon_url=af.avatar.replace(static_format="png"))
-            if self._fired[af.id] == 4:
+            if self._fired[af.id] == len(af.mutual_guilds):
                 await channel.send(embed=e)
 
 async def setup(bot):
