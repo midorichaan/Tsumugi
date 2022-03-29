@@ -18,7 +18,7 @@ class mido_presence(commands.Cog):
             return
 
         if af.id in self.bot.instance["ids"]:
-            if not self._fired[af.id]:
+            if not self._fired.get(af.id, None):
                 self._fired[af.id] = 1
             self._fired[af.id] += 1
             channel = self.bot.get_channel(self.bot.instance["channels"]["presence"])
