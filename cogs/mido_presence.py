@@ -16,7 +16,7 @@ class mido_presence(commands.Cog):
         if af.id in self.bot.instance["ids"]:
             channel = self.bot.get_channel(self.bot.instance["channels"]["presence"])
             e = discord.Embed(
-                description=f"{af.activity.name} をプレイ中",
+                description=f"__**{af.activity.name}**__ をプレイ中",
                 color=0xf996ff,
                 timestamp=datetime.datetime.now()
             )
