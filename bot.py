@@ -29,6 +29,9 @@ class TsumugiChan(commands.AutoShardedBot):
                 "error": None,
                 "traceback": None,
                 "context": None
+            },
+            "channels": {
+                "presence": 997358448968740985,
             }
         }
 
