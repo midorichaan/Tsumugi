@@ -15,4 +15,3 @@ class mido_slash(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(mido_slash(bot))
-    await bot.tree.sync(guild=discord.Object(701131006698192916))
