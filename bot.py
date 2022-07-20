@@ -3,7 +3,6 @@ from discord.ext import commands, tasks
 
 import aiohttp
 import os
-import traceback
 from dotenv import load_dotenv
 from lib import utils
 from logging import basicConfig, getLogger, INFO
