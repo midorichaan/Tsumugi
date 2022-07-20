@@ -17,7 +17,7 @@ class mido_slash(commands.Cog):
     )
     @app_commands.guilds(guild_id)
     async def _ping(self, interact: discord.Interaction):
-        msg = await interact.response_send_message(
+        msg = await interact.response.send_message(
             "> Pinging..."
         )
 
