@@ -36,7 +36,8 @@ class TsumugiChan(commands.AutoShardedBot):
         }
 
         self._cogs = [
-            "cogs.mido_admins", "jishaku"
+            "cogs.mido_admins", "cogs.mido_events", "cogs.mido_slash", 
+            "cogs.mido_presence", "jishaku"
         ]
 
     #post
@@ -75,44 +76,40 @@ class TsumugiChan(commands.AutoShardedBot):
         token = os.environ.get("TOKEN", None)
         if not token:
             self.logger.critical(
-                "bot token was not provided"
+                "RUNNER: Bot token was not provided"
             )
             return
         else:
             try:
                 super().run(token)
             except Exception as exc:
-                self.logger.critical(exc)
+                self.logger.critical(f"RUNNER: {exc}")
             else:
                 self.logger.info(
-                    "Enabling tsumugi discordbot..."
+                    "RUNNER: Enabling tsumugi discordbot..."
                 )
 
-    #on_connect
-    async def on_connect(self) -> None:
-        self.logger.info(
-            "Successfully connected to Discord"
-        )
-
-        for i in range(self.shard_count):
-
-    #on_ready
-    async def on_ready(self) -> None:
-        self.logger.info(f"Logged in as {self.user}")
-        await self.post_api(1)
+    #setup_hook
+    async def setup_hook(self):
+        self.logger.info("SYSTEM: Setting up...")
 
         for i in self._cogs:
             try:
                 await self.load_extension(i)
             except Exception as exc:
-                self.logger.error(exc)
+                self.logger.error(f"ERROR: {exc}")
             else:
-                self.logger.info(f"Cog {i} load")
+                self.logger.info(f"SYSTEM: Cog {i} load")
 
         try:
             self.api_status_poster.start()
         except Exception as exc:
-            self.logger.error(exc)
+            self.logger.error(f"ERROR: {exc}")
+
+    #on_ready
+    async def on_ready(self) -> None:
+        self.logger.info(f"RUNNER: Logged in as {self.user}")
+        await self.post_api(1)
 
         try:
             await self.change_presence(
@@ -124,43 +121,10 @@ class TsumugiChan(commands.AutoShardedBot):
         except Exception as exc:
             self.logger.error(exc)
         else:
-            self.logger.info("Presence changed")
+            self.logger.info("SYSTEM: Presence changed")
 
         self.instance["ready"] = True
-        self.logger.info("Enabled tsumugi discordbot")
-
-    #on_command
-    async def on_command(self, ctx) -> None:
-        if isinstance(ctx.channel, discord.DMChannel):
-            format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @DM"
-            self.logger.info(format)
-        else:
-            format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @{ctx.channel} ({ctx.channel.id}) - {ctx.guild} ({ctx.guild.id})"
-            self.logger.info(format)
-
-    #on_command_error
-    async def on_command_error(self, ctx, exc) -> None:
-        traceback_exc = ''.join(
-            traceback.TracebackException.from_exception(exc).format()
-        )
-        format = ""
-
-        self.instance["exception"] = {
-            "error": exc,
-            "traceback": traceback_exc,
-            "context": ctx
-        }
-
-        if isinstance(ctx.channel, discord.DMChannel):
-            format = f"ERROR: {ctx.author} ({ctx.author.id}) -> {exc} @DM"
-        else:
-            format = f"ERROR: {ctx.author} ({ctx.author.id}) -> {exc} @{ctx.channel} ({ctx.channel.id}) - {ctx.guild} ({ctx.guild.id})"
-
-        self.logger.warning(format)
-        await utils.reply_or_send(
-            ctx,
-            content=f"> エラー \n```py\n{exc}\n```"
-        )
+        self.logger.info("RUNNER: Enabled tsumugi discordbot")
 
 #logger
 basicConfig(
