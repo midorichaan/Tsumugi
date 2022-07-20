@@ -11,14 +11,15 @@ class mido_slash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    #ping command
     @app_commands.command(
         name="ping",
-        description="Ping Command"
+        description="BotのPingを返します"
     )
-    @app_commands.guilds(guild_id)
     async def _ping(self, interact: discord.Interaction):
         msg = await interact.response.send_message(
-            "> Pinging..."
+            "> Pinging...",
+            ephemeral=True
         )
 
         msg_time = time.perf_counter()
