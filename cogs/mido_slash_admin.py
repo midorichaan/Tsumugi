@@ -26,7 +26,7 @@ class mido_slash_admin(commands.Cog):
             await self.bot.reload_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content="> エラー \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```"
             )
         else:
             return await interact.response.send_message(
@@ -46,7 +46,7 @@ class mido_slash_admin(commands.Cog):
             await self.bot.load_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content="> エラー \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```"
             )
         else:
             return await interact.response.send_message(
@@ -66,7 +66,7 @@ class mido_slash_admin(commands.Cog):
             await self.bot.unload_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content="> エラー \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```"
             )
         else:
             return await interact.response.send_message(
