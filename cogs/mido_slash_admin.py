@@ -54,9 +54,9 @@ class mido_slash_admin(commands.Cog):
             )
 
     #admin unload
-    @group.command(name="load", description="ファイルをunloadします")
+    @group.command(name="unload", description="ファイルをunloadします")
     @app_commands.describe(module="unloadするCog")
-    async def _load(self, interact: discord.Interaction, module: str=None):
+    async def _unload(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
                 content="> unloadするCogを指定してください"
