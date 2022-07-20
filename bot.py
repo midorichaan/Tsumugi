@@ -126,22 +126,24 @@ class TsumugiChan(commands.AutoShardedBot):
         self.instance["ready"] = True
         self.logger.info("RUNNER: Enabled tsumugi discordbot")
 
-#logger
-basicConfig(
-    level=INFO,
-    format="%(asctime)s - %(name)s - [%(levelname)s]: %(message)s"
-)
-logger = getLogger("discord")
+#run
+if __name__ == "__main__":
+    #logger
+    basicConfig(
+        level=INFO,
+        format="%(asctime)s - %(name)s - [%(levelname)s]: %(message)s"
+    )
+    logger = getLogger("discord")
 
-#vars
-intents = discord.Intents.all()
+    #vars
+    intents = discord.Intents.all()
 
-#instance
-bot = TsumugiChan(
-    logger=logger,
-    intents=intents,
-    command_prefix=os.environ.get("PREFIX", "."),
-    shard_count=2,
-    status=discord.Status.idle
-)
-bot.run()
+    #instance
+    bot = TsumugiChan(
+        logger=logger,
+        intents=intents,
+        command_prefix=os.environ.get("PREFIX", "."),
+        shard_count=2,
+        status=discord.Status.idle
+    )
+    bot.run()
