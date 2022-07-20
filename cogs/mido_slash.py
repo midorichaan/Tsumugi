@@ -4,6 +4,8 @@ from discord.ext import commands
 
 import time
 
+guild_id = discord.Object(id=701131006698192916)
+
 class mido_slash(commands.Cog):
 
     def __init__(self, bot):
@@ -13,6 +15,7 @@ class mido_slash(commands.Cog):
         name="ping",
         description="Ping Command"
     )
+    @app_commands.guilds(guild_id)
     async def _ping(self, interact: discord.Interaction):
         msg = await interact.response_send_message(
             "> Pinging..."
