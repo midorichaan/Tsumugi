@@ -10,8 +10,8 @@ class mido_slash(commands.Cog):
         self.bot = bot
 
     @app_commands.command(
-        name="ping"
-        description="Ping Command",
+        name="ping",
+        description="Ping Command"
     )
     async def _ping(self, interact: discord.Interaction):
         msg = await interact.response_send_message(
