@@ -106,9 +106,9 @@ class mido_events(commands.Cog):
     #on_interact
     @commands.Cog.listener()
     async def on_interaction(self, interact: discord.Interaction):
-        if interact.type == "ping":
+        if str(interact.type) == "ping":
             pass
-        elif interact.type == "application_command":
+        elif str(interact.type) == "application_command":
             format = ""
 
             if isinstance(interact.channel, discord.DMChannel):
@@ -116,11 +116,11 @@ class mido_events(commands.Cog):
             else:
                 format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.message} @{interact.guild} ({interact.guild.id})"
             self.bot.logger.info(format)
-        elif interact.type == "component":
+        elif str(interact.type) == "component":
             pass
-        elif interact.type == "autocomplete":
+        elif str(interact.type) == "autocomplete":
             pass
-        elif interact.type == "modal_submit":
+        elif str(interact.type) == "modal_submit":
             pass
 
 #setup
