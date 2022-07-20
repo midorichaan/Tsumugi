@@ -111,7 +111,7 @@ class mido_events(commands.Cog):
         elif interact.type == "application_command":
             format = ""
 
-            if isinstance(interact.channel, discord.DMChannel:
+            if isinstance(interact.channel, discord.DMChannel):
                 format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.message} @{interact.user} ({interact.user.id})"
             else:
                 format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.message} @{interact.guild} ({interact.guild.id})"
