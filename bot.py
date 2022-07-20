@@ -11,8 +11,9 @@ from logging import basicConfig, getLogger, INFO
 load_dotenv()
 
 #environ JISHAKU
-os.environ["NO_UNDERSCORE"] = "True"
-os.environ["NO_DM_TRACEBACK"] = "True"
+os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
+os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
+os.environ["JISHAKU_ALWAYS_DM_TRACEBACK"] = "False"
 
 class TsumugiChan(commands.AutoShardedBot):
 
