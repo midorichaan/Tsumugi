@@ -10,6 +10,7 @@ class mido_events(commands.Cog):
         self.bot = bot
 
     #on_shard_connect
+    @commands.Cog.listener()
     async def on_shard_connect(self, shard_id: int) -> None:
         self.bot.logger.info(
             f"SESSION: Shard ID {shard_id} has successfully connected to Discord"
@@ -17,6 +18,7 @@ class mido_events(commands.Cog):
         self.bot.instance["shards"][shard_id] = 1
 
     #on_shard_disconnect
+    @commands.Cog.listener()
     async def on_shard_disconnect(self, shard_id: int) -> None:
         self.bot.logger.warning(
             f"SESSION: Shard ID {shard_id} has disconnected from Discord"
@@ -24,6 +26,7 @@ class mido_events(commands.Cog):
         self.bot.instance["shards"][shard_id] = 0
 
     #on_shard_ready
+    @commands.Cog.listener()
     async def on_shard_ready(self, shard_id: int) -> None:
         self.bot.logger.info(
             f"SESSION: Shard ID {shard_id} has become ready"
@@ -31,6 +34,7 @@ class mido_events(commands.Cog):
         self.bot.instance["shards"][shard_id] = 2
 
     #on_shard_resumed
+    @commands.Cog.listener()
     async def on_shard_resumed(self, shard_id: int) -> None:
         self.bot.logger.info(
             f"SESSION: Shard ID {shard_id} has resumed"
@@ -38,6 +42,7 @@ class mido_events(commands.Cog):
         self.bot.instance["shards"][shard_id] = 2
 
     #on_resumed
+    @commands.Cog.listener()
     async def on_resumed(self) -> None:
         self.bot.logger.info(
             "SESSION: Session has resumed"
@@ -45,13 +50,15 @@ class mido_events(commands.Cog):
         self.bot.instance["session"] = 1
 
     #on_disconnect
+    @commands.Cog.listener()
     async def on_disconnect(self) -> None:
         self.bot.logger.warning(
             "SESSION: Successfully disconnected to Discord"
         )
         self.bot.instance["session"] = 0
 
-     #on_connect
+    #on_connect
+    @commands.Cog.listener()
     async def on_connect(self) -> None:
         self.logger.info(
             "Successfully connected to Discord"
@@ -62,6 +69,7 @@ class mido_events(commands.Cog):
         self.bot.instance["session"] = 1
 
     #on_command
+    @commands.Cog.listener()
     async def on_command(self, ctx) -> None:
         if isinstance(ctx.channel, discord.DMChannel):
             format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @DM"
@@ -71,6 +79,7 @@ class mido_events(commands.Cog):
             self.bot.logger.info(format)
 
     #on_command_error
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, exc) -> None:
         traceback_exc = ''.join(
             traceback.TracebackException.from_exception(exc).format()
@@ -93,6 +102,26 @@ class mido_events(commands.Cog):
             ctx,
             content=f"> エラー \n```py\n{exc}\n```"
         )
+
+    #on_interact
+    @commands.Cog.listener()
+    async def on_interaction(self, interact: discord.Interaction):
+        if interact.type == "ping":
+            pass
+        elif interact.type == "application_command":
+            format = ""
+
+            if isinstance(interact.channel, discord.DMChannel:
+                format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.message} @{interact.user} ({interact.user.id})"
+            else:
+                format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.message} @{interact.guild} ({interact.guild.id})"
+            self.bot.logger.info(format)
+        elif interact.type == "component":
+            pass
+        elif interact.type == "autocomplete":
+            pass
+        elif interact.type == "modal_submit":
+            pass
 
 #setup
 async def setup(bot):
