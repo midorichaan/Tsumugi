@@ -112,9 +112,9 @@ class mido_events(commands.Cog):
             format = ""
 
             if isinstance(interact.channel, discord.DMChannel):
-                format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.command} @{interact.user} ({interact.user.id})"
+                format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.command.name} @{interact.user} ({interact.user.id})"
             else:
-                format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.command} @{interact.guild} ({interact.guild.id})"
+                format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.command.name} @{interact.guild} ({interact.guild.id})"
             self.bot.logger.info(format)
         elif interact.type == discord.InteractionType.component:
             pass
