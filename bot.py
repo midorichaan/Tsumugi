@@ -95,50 +95,6 @@ class TsumugiChan(commands.AutoShardedBot):
         )
 
         for i in range(self.shard_count):
-            self.instance["shards"][i] = 0
-        self.instance["session"] = 1
-
-    #on_disconnect
-    async def on_disconnect(self) -> None:
-        self.logger.warning(
-            "Successfully connected to Discord"
-        )
-        self.instance["session"] = 0
-
-    #on_shard_connect
-    async def on_shard_connect(self, shard_id: int) -> None:
-        self.logger.info(
-            f"Shard ID {shard_id} has successfully connected to Discord"
-        )
-        self.instance["shards"][shard_id] = 1
-
-    #on_shard_disconnect
-    async def on_shard_disconnect(self, shard_id: int) -> None:
-        self.logger.warning(
-            f"Shard ID {shard_id} has disconnected from Discord"
-        )
-        self.instance["shards"][shard_id] = 0
-
-    #on_shard_ready
-    async def on_shard_ready(self, shard_id: int) -> None:
-        self.logger.info(
-            f"Shard ID {shard_id} has become ready"
-        )
-        self.instance["shards"][shard_id] = 2
-
-    #on_shard_resumed
-    async def on_shard_resumed(self, shard_id: int) -> None:
-        self.logger.info(
-            f"Shard ID {shard_id} has resumed"
-        )
-        self.instance["shards"][shard_id] = 2
-
-    #on_resumed
-    async def on_resumed(self) -> None:
-        self.logger.info(
-            "Session has resumed"
-        )
-        self.instance["session"] = 1
 
     #on_ready
     async def on_ready(self) -> None:
