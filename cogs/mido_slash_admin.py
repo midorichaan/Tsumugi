@@ -19,18 +19,21 @@ class mido_slash_admin(commands.Cog):
     async def _reload(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
-                content="> 再読み込みするCogを指定してください"
+                content="> 再読み込みするCogを指定してください",
+                ephemeral=True
             )
 
         try:
             await self.bot.reload_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> エラー \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```",
+                ephemeral=True
             )
         else:
             return await interact.response.send_message(
-                content=f"> {module} を再読み込みしました"
+                content=f"> {module} を再読み込みしました",
+                ephemeral=True
             )
 
     #admin load
@@ -39,18 +42,21 @@ class mido_slash_admin(commands.Cog):
     async def _load(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
-                content="> 読み込むCogを指定してください"
+                content="> 読み込むCogを指定してください",
+                ephemeral=True
             )
 
         try:
             await self.bot.load_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> エラー \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```",
+                ephemeral=True
             )
         else:
             return await interact.response.send_message(
-                content=f"> {module} を読み込みました"
+                content=f"> {module} を読み込みました",
+                ephemeral=True
             )
 
     #admin unload
@@ -59,18 +65,21 @@ class mido_slash_admin(commands.Cog):
     async def _unload(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
-                content="> unloadするCogを指定してください"
+                content="> unloadするCogを指定してください",
+                ephemeral=True
             )
 
         try:
             await self.bot.unload_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> エラー \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```",
+                ephemeral=True
             )
         else:
             return await interact.response.send_message(
-                content=f"> {module} をunloadしました"
+                content=f"> {module} をunloadしました",
+                ephemeral=True
             )
 
 #setup
