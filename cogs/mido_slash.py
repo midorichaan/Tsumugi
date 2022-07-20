@@ -4,8 +4,6 @@ from discord.ext import commands
 
 import time
 
-guild_id = discord.Object(id=701131006698192916)
-
 class mido_slash(commands.Cog):
 
     def __init__(self, bot):
@@ -17,12 +15,13 @@ class mido_slash(commands.Cog):
         description="BotのPingを返します"
     )
     async def _ping(self, interact: discord.Interaction):
+        msg_time = time.perf_counter()
+
         msg = await interact.response.send_message(
             "> Pinging...",
             ephemeral=True
         )
 
-        msg_time = time.perf_counter()
         ws = round(self.bot.latency * 1000, 2)
         ping = round(time.perf_counter() - msg_time, 3) * 1000
 
