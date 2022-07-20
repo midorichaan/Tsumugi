@@ -25,7 +25,7 @@ class mido_slash_admin(commands.Cog):
 
         env = {
             'bot': self.bot,
-            'ctx': ctx,
+            'interact': interact,
             'self': self,
             '_': self._
         }
