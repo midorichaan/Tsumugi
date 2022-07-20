@@ -86,7 +86,7 @@ class mido_events(commands.Cog):
         )
         format = ""
 
-        self.instance["exception"] = {
+        self.bot.instance["exception"] = {
             "error": exc,
             "traceback": traceback_exc,
             "context": ctx
@@ -106,9 +106,9 @@ class mido_events(commands.Cog):
     #on_interact
     @commands.Cog.listener()
     async def on_interaction(self, interact: discord.Interaction):
-        if str(interact.type) == "ping":
+        if isinstance(interact.type, discord.InteractionType.ping):
             pass
-        elif str(interact.type) == "application_command":
+        elif isinstance(interact.type, discord.InteractionType.application_command):
             format = ""
 
             if isinstance(interact.channel, discord.DMChannel):
@@ -116,11 +116,11 @@ class mido_events(commands.Cog):
             else:
                 format = f"APPCMD: {interact.user} ({interact.user.id}) - {interact.id} → {interact.message} @{interact.guild} ({interact.guild.id})"
             self.bot.logger.info(format)
-        elif str(interact.type) == "component":
+        elif isinstance(interact.type, discord.InteractionType.component):
             pass
-        elif str(interact.type) == "autocomplete":
+        elif isinstance(interact.type, discord.InteractionType.autocomplete):
             pass
-        elif str(interact.type) == "modal_submit":
+        elif isinstance(interact.type, discord.InteractionType.modal_submit):
             pass
 
 #setup
