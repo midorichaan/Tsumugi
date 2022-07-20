@@ -1,13 +1,13 @@
 import discord
 from discord.ext import commands
 
+import traceback
+from lib import utils
+
 class mido_events(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-                self.instance["shards"][i] = 0
-        self.instance["session"] = 1
 
     #on_shard_connect
     async def on_shard_connect(self, shard_id: int) -> None:
@@ -19,7 +19,7 @@ class mido_events(commands.Cog):
     #on_shard_disconnect
     async def on_shard_disconnect(self, shard_id: int) -> None:
         self.bot.logger.warning(
-            f"Shard ID {shard_id} has disconnected from Discord"
+            f"SESSION: Shard ID {shard_id} has disconnected from Discord"
         )
         self.bot.instance["shards"][shard_id] = 0
 
@@ -50,6 +50,49 @@ class mido_events(commands.Cog):
             "SESSION: Successfully disconnected to Discord"
         )
         self.bot.instance["session"] = 0
+
+     #on_connect
+    async def on_connect(self) -> None:
+        self.logger.info(
+            "Successfully connected to Discord"
+        )
+
+        for i in range(self.shard_count):
+            self.bot.instance["shards"][i] = 0
+        self.bot.instance["session"] = 1
+
+    #on_command
+    async def on_command(self, ctx) -> None:
+        if isinstance(ctx.channel, discord.DMChannel):
+            format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @DM"
+            self.bot.logger.info(format)
+        else:
+            format = f"COMMAND: {ctx.author} ({ctx.author.id}) -> {ctx.message.content} @{ctx.channel} ({ctx.channel.id}) - {ctx.guild} ({ctx.guild.id})"
+            self.bot.logger.info(format)
+
+    #on_command_error
+    async def on_command_error(self, ctx, exc) -> None:
+        traceback_exc = ''.join(
+            traceback.TracebackException.from_exception(exc).format()
+        )
+        format = ""
+
+        self.instance["exception"] = {
+            "error": exc,
+            "traceback": traceback_exc,
+            "context": ctx
+        }
+
+        if isinstance(ctx.channel, discord.DMChannel):
+            format = f"ERROR: {ctx.author} ({ctx.author.id}) -> {exc} @DM"
+        else:
+            format = f"ERROR: {ctx.author} ({ctx.author.id}) -> {exc} @{ctx.channel} ({ctx.channel.id}) - {ctx.guild} ({ctx.guild.id})"
+
+        self.bot.logger.warning(format)
+        await utils.reply_or_send(
+            ctx,
+            content=f"> エラー \n```py\n{exc}\n```"
+        )
 
 #setup
 async def setup(bot):
