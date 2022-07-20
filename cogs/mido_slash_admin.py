@@ -11,7 +11,7 @@ class mido_slash_admin(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self._
+        self._ = None
 
     #eval
     @app_commands.command(name="eval", description="Pythonのコードを評価します")
