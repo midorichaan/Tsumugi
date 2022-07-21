@@ -72,6 +72,11 @@ class mido_slash_admin(commands.Cog):
                         content=f'```py\n{value}\n```',
                         ephemeral=True
                     )
+                else:
+                    await interact.response.send_message(
+                        content=f"```py\nNone\n```",
+                        ephemeral=True
+                    )
             else:
                 self._ = ret
                 await interact.response.send_message(
