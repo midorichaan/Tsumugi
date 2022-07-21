@@ -13,9 +13,18 @@ class mido_slash_admin(commands.Cog):
         self.bot = bot
         self._ = None
 
+    #is_owner
+    def is_owner(self, interact: discord.Interaction):
+        async def predicate(interact: discord.Interact):
+            if not await self.bot.is_owner(interact.user):
+                return False
+            return True
+        return predicate
+
     #eval
     @app_commands.command(name="eval", description="Pythonのコードを評価します")
     @app_commands.describe(code="評価するコード")
+    @app_commands.check(is_owner)
     async def _eval(self, interact: discord.Interaction, *, code: str=None):
         if not code:
             return await interact.response.send_message(
@@ -78,6 +87,7 @@ class mido_slash_admin(commands.Cog):
     #admin reload
     @group.command(name="reload", description="ファイルの再読み込みを行います")
     @app_commands.describe(module="再読み込みするCog")
+    @app_commands.check(is_owner)
     async def _reload(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
@@ -101,6 +111,7 @@ class mido_slash_admin(commands.Cog):
     #admin load
     @group.command(name="load", description="ファイルを読み込みます")
     @app_commands.describe(module="読み込むCog")
+    @app_commands.check(is_owner)
     async def _load(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
@@ -124,6 +135,7 @@ class mido_slash_admin(commands.Cog):
     #admin unload
     @group.command(name="unload", description="ファイルをunloadします")
     @app_commands.describe(module="unloadするCog")
+    @app_commands.check(is_owner)
     async def _unload(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
