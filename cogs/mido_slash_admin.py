@@ -15,13 +15,15 @@ class mido_slash_admin(commands.Cog):
         self._ = None
 
     #is_owner
-    async def is_owner(self, interact: discord.Interaction):
-        if not await self.bot.is_owner(interact.user):
-            await interact.response.send_message(
-                content=f"> このコマンドは使用できません"
-            )
-            return False
-        return True
+    async def is_owner(self):
+        async def p(interact: discord.Interaction):
+            if not await self.bot.is_owner(interact.user):
+                await interact.response.send_message(
+                    content=f"> このコマンドは使用できません"
+                )
+                    return False
+            return True
+        return p
 
     #shell
     @app_commands.command(name="shell", description="シェルコマンドを実行します")
