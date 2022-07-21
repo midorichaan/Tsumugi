@@ -22,6 +22,34 @@ class mido_slash_admin(commands.Cog):
             return True
         return predicate
 
+    #shell
+    @app_commands.command(name="shell", description="シェルコマンドを実行します")
+    @app_commands.describe(command="実行するコマンド")
+    @app_commands.check(is_owner)
+    async def _shell(self, interact: discord.Interaction, *, command: str=None):
+        if not command:
+            return await interact.response.send_message(
+                content=f"> コマンドを入力してください",
+                ephemeral=True
+            )
+
+        try:
+            stdout, stderr = await utils.run_process(interact, command)
+            if stderr:
+                text = f"```\nstdout: \n{stdout} \n\nstderr: \n{stderr}\n```"
+            else:
+                text = f"```\nstdout: \n{stdout} \n\nstderr: \nNone\n```"
+        except Exception as exc:
+            return await interact.response.send_message(
+                content=f"> エラー \n```py\n{exc}\n```",
+                ephemeral=True
+            )
+        else:
+            return await interact.response.send_message(
+                content=text,
+                ephemeral=True
+            )
+
     #eval
     @app_commands.command(name="eval", description="Pythonのコードを評価します")
     @app_commands.describe(code="評価するコード")
