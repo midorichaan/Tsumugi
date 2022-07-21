@@ -1,39 +1,35 @@
 import discord
+from discord import ui
 
-class Confirm(discord.ui.View):
+class PunishmentDropdown(ui.Select):
 
-    def __init__(
-        self, *, msg_y: str=None, msg_n: str=None, msg=None
-    ):
-        super().__init__()
+    def __init__(self):
+        options = [
+            discord.SelectOption(
+                label="punish-kick",
+                description="メンバーをサーバーからKickします",
+                emoji="🦶"
+            ),
+            discord.SelectOption(
+                label="punish-ban",
+                description="メンバーをサーバーからBanします",
+                emoji="⚒"
+            ),
+            discord.SelectOption(
+                label="punish-timeout",
+                description="メンバーをタイムアウトします",
+                emoji="📢"
+            )
+        ]
 
-        self._confirmed = None
-        self.msg_yes = msg_y if msg_y else "Confirming！"
-        self.msg_no = msg_n if msg_n else "Cancelling！"
-        self.msg = msg
-
-    #confirm button
-    @discord.ui.button(
-        label="confirm",
-        style=discord.ButtonStyle.green
-    )
-    async def confirm(self, inter: discord.Interaction, button: discord.ui.Button):
-        await inter.response.send_message(
-            self.msg_yes,
-            ephemeral=True
+        super().__init__(
+            placeholder="処罰の種類を選択してください",
+            min_values=1,
+            max_values=1,
+            options=options
         )
-        self._confirmed = True
-        self.stop()
 
-    #cancelled
-    @discord.ui.button(
-        label="cancel",
-        style=discord.ButtonStyle.red
-    )
-    async def cancel(self, inter: discord.Interaction, button: discord.ui.Button):
-        await inter.response.send_message(
-            self.msg_no,
-            ephemeral=True
-        )
-        self._confirmed = False
-        self.stop()
+    #callback
+    async def callback(self, interact: discord.Interaction):
+        pass
+    
