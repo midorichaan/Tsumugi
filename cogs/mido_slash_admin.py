@@ -15,7 +15,7 @@ class mido_slash_admin(commands.Cog):
 
     #is_owner
     def is_owner(self):
-        async def predicate(interact: discord.Interact):
+        async def predicate(interact: discord.Interaction):
             if not await self.bot.is_owner(interact.user):
                 return False
             return True
