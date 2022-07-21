@@ -33,3 +33,8 @@ class PunishmentDropdown(ui.Select):
     async def callback(self, interact: discord.Interaction):
         pass
     
+class PunishmentView(ui.View):
+
+    def __init__(self):
+        super().__init__()
+        self.add_item(PunishmentDropdown())
