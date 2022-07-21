@@ -21,7 +21,7 @@ class mido_slash_admin(commands.Cog):
                 await interact.response.send_message(
                     content=f"> このコマンドは使用できません"
                 )
-                    return False
+                return False
             return True
         return p
 
