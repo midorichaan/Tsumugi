@@ -18,6 +18,9 @@ class mido_slash_admin(commands.Cog):
     def is_owner(self):
         async def predicate(interact: discord.Interaction):
             if not await self.bot.is_owner(interact.user):
+                await interact.response.send_message(
+                    content=f"> このコマンドは使用できません"
+                )
                 return False
             return True
         return predicate
@@ -29,8 +32,7 @@ class mido_slash_admin(commands.Cog):
     async def _shell(self, interact: discord.Interaction, *, command: str=None):
         if not command:
             return await interact.response.send_message(
-                content=f"> コマンドを入力してください",
-                ephemeral=True
+                content=f"> コマンドを入力してください"
             )
 
         try:
@@ -41,13 +43,11 @@ class mido_slash_admin(commands.Cog):
                 text = f"```\nstdout: \n{stdout} \n\nstderr: \nNone\n```"
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> エラー \n```py\n{exc}\n```",
-                ephemeral=True
+                content=f"> エラー \n```py\n{exc}\n```"
             )
         else:
             return await interact.response.send_message(
-                content=text,
-                ephemeral=True
+                content=text
             )
 
     #eval
@@ -57,8 +57,7 @@ class mido_slash_admin(commands.Cog):
     async def _eval(self, interact: discord.Interaction, *, code: str=None):
         if not code:
             return await interact.response.send_message(
-                content=f"> 評価するコードを入力してください",
-                ephemeral=True
+                content=f"> 評価するコードを入力してください"
             )
 
         env = {
@@ -77,8 +76,7 @@ class mido_slash_admin(commands.Cog):
             exec(to_compile, env)
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"```py\n{exc.__class__.__name__}: {exc}\n```",
-                ephemeral=True
+                content=f"```py\n{exc.__class__.__name__}: {exc}\n```"
             )
 
         func = env['func']
@@ -88,8 +86,7 @@ class mido_slash_admin(commands.Cog):
         except Exception as exc:
             value = stdout.getvalue()
             return await interact.response.send_message(
-                content=f'```py\n{value}{traceback.format_exc()}\n```',
-                ephemeral=True
+                content=f'```py\n{value}{traceback.format_exc()}\n```'
             )
         else:
             value = stdout.getvalue()
@@ -97,19 +94,16 @@ class mido_slash_admin(commands.Cog):
             if ret is None:
                 if value:
                     await interact.response.send_message(
-                        content=f'```py\n{value}\n```',
-                        ephemeral=True
+                        content=f'```py\n{value}\n```'
                     )
                 else:
                     await interact.response.send_message(
-                        content=f"```py\nNone\n```",
-                        ephemeral=True
+                        content=f"```py\nNone\n```"
                     )
             else:
                 self._ = ret
                 await interact.response.send_message(
-                    content=f'```py\n{value}{ret}\n```',
-                    ephemeral=True
+                    content=f'```py\n{value}{ret}\n```'
                 )
 
     #group instance
@@ -125,21 +119,18 @@ class mido_slash_admin(commands.Cog):
     async def _reload(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
-                content="> 再読み込みするCogを指定してください",
-                ephemeral=True
+                content="> 再読み込みするCogを指定してください"
             )
 
         try:
             await self.bot.reload_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> エラー \n```py\n{exc}\n```",
-                ephemeral=True
+                content=f"> エラー \n```py\n{exc}\n```"
             )
         else:
             return await interact.response.send_message(
-                content=f"> {module} を再読み込みしました",
-                ephemeral=True
+                content=f"> {module} を再読み込みしました"
             )
 
     #admin load
@@ -149,21 +140,18 @@ class mido_slash_admin(commands.Cog):
     async def _load(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
-                content="> 読み込むCogを指定してください",
-                ephemeral=True
+                content="> 読み込むCogを指定してください"
             )
 
         try:
             await self.bot.load_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> エラー \n```py\n{exc}\n```",
-                ephemeral=True
+                content=f"> エラー \n```py\n{exc}\n```"
             )
         else:
             return await interact.response.send_message(
-                content=f"> {module} を読み込みました",
-                ephemeral=True
+                content=f"> {module} を読み込みました"
             )
 
     #admin unload
@@ -173,21 +161,18 @@ class mido_slash_admin(commands.Cog):
     async def _unload(self, interact: discord.Interaction, module: str=None):
         if not module:
             return await interact.response.send_message(
-                content="> unloadするCogを指定してください",
-                ephemeral=True
+                content="> unloadするCogを指定してください"
             )
 
         try:
             await self.bot.unload_extension(module)
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> エラー \n```py\n{exc}\n```",
-                ephemeral=True
+                content=f"> エラー \n```py\n{exc}\n```"
             )
         else:
             return await interact.response.send_message(
-                content=f"> {module} をunloadしました",
-                ephemeral=True
+                content=f"> {module} をunloadしました"
             )
 
 #setup
