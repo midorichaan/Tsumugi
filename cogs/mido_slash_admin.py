@@ -8,22 +8,21 @@ import traceback
 from contextlib import redirect_stdout
 from lib import utils
 
+#is_owner
+def is_owner():
+    async def p(i: discord.Interaction):
+        if not await i.client.is_owner(i.user):
+            return await interact.response.send_message(
+                content=f"> このコマンドは使用できません"
+            )
+        return True
+    return app_commands.check(p)
+
 class mido_slash_admin(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
         self._ = None
-
-    #is_owner
-    def is_owner(self):
-        async def p(interact: discord.Interaction):
-            if not await self.bot.is_owner(interact.user):
-                await interact.response.send_message(
-                    content=f"> このコマンドは使用できません"
-                )
-                return False
-            return True
-        return app_commands.check(p)
 
     #shell
     @app_commands.command(name="shell", description="シェルコマンドを実行します")
