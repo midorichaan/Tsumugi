@@ -12,7 +12,7 @@ from lib import utils
 def is_owner():
     async def p(i: discord.Interaction):
         if not await i.client.is_owner(i.user):
-            return await interact.response.send_message(
+            return await i.response.send_message(
                 content=f"> このコマンドは使用できません"
             )
         return True
