@@ -31,7 +31,7 @@ class PunishmentDropdown(ui.Select):
 
     #callback
     async def callback(self, interact: discord.Interaction):
-        pass
+        return self.values[0]
     
 class PunishmentView(ui.View):
 
