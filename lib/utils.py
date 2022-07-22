@@ -50,6 +50,9 @@ async def run_process(ctx, command):
 #fetchuserconverter
 class FetchUserConverter(commands.Converter):
     async def convert(self, ctx, argument):
+        if hasatrr(ctx, "client"):
+            ctx.bot = ctx.client
+            
         if argument.isdigit():
             ret = ctx.bot.get_user(int(argument))
             if not ret:
