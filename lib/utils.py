@@ -46,3 +46,21 @@ async def run_process(ctx, command):
         result = await ctx.bot.loop.run_in_executor(None, process.communicate)
 
     return [output.decode() for output in result]
+
+#fetchuserconverter
+class FetchUserConverter(commands.Converter):
+    async def convert(self, ctx, argument):
+        if argument.isdigit():
+            ret = ctx.bot.get_user(int(argument))
+            if not ret:
+                try:
+                    return await ctx.bot.fetch_user(int(argument))
+                except:
+                    return None
+        try:
+            return await commands.MemberConverter().convert(ctx, argument)
+        except:
+            try:
+                return await commands.UserConverter().convert(ctx, argument)
+            except:
+                return None
