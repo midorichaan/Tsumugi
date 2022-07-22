@@ -49,7 +49,7 @@ class mido_slash(commands.Cog):
             target = await utils.FetchUserConverter().convert(interact, str(target))
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> メンバー {target} は見つかりませんでした"
+                content=f"> メンバー {target} は見つかりませんでした \n```py\n{exc}\n```"
             )
 
         drop = views.PunishmentDropdown()
