@@ -28,13 +28,14 @@ class PunishmentDropdown(ui.Select):
             max_values=1,
             options=options
         )
+        self._value = None
 
     #callback
     async def callback(self, interact: discord.Interaction):
-        return self.values[0]
+        self._value = self.values[0]
+        return self.values
     
-class PunishmentView(ui.View):
+class BasicView(ui.View):
 
     def __init__(self):
         super().__init__()
-        self.add_item(PunishmentDropdown())
