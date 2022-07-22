@@ -1,4 +1,5 @@
 import asyncio
+import copy
 import subprocess
 from discord.ext import commands
 
@@ -50,20 +51,21 @@ async def run_process(ctx, command):
 #fetchuserconverter
 class FetchUserConverter(commands.Converter):
     async def convert(self, ctx, argument):
+        new_ctx = copy.copy(ctx)
         if hasatrr(ctx, "client"):
-            ctx.bot = ctx.client
+            new_ctx.bot = ctx.client
             
         if argument.isdigit():
-            ret = ctx.bot.get_user(int(argument))
+            ret = new_ctx.bot.get_user(int(argument))
             if not ret:
                 try:
-                    return await ctx.bot.fetch_user(int(argument))
+                    return await new_ctx.bot.fetch_user(int(argument))
                 except:
                     return None
         try:
-            return await commands.MemberConverter().convert(ctx, argument)
+            return await commands.MemberConverter().convert(new_ctx, argument)
         except:
             try:
-                return await commands.UserConverter().convert(ctx, argument)
+                return await commands.UserConverter().convert(new_ctx, argument)
             except:
                 return None
