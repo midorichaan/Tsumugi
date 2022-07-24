@@ -14,7 +14,6 @@ from lib import utils as util, paginator
 
 #load .env file
 load_dotenv()
-os.environ["YOUTUBE_KEY"] = ""
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 ytdl_format_options = {
@@ -44,7 +43,7 @@ class mido_music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
-        self.youtube = build("youtube", "v3", developerKey=os.environ["YOUTUBE_KEY"])
+       # self.youtube = build("youtube", "v3", developerKey=os.environ["YOUTUBE_KEY"])
 
     #get_data
     async def get_data(self, ctx, key, download=False):
