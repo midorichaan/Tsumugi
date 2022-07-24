@@ -497,8 +497,8 @@ class mido_music(commands.Cog):
                     self.bot.queue[ctx.guild.id].append(self.bot.queue[ctx.guild.id][0])
                 self.bot.queue[ctx.guild.id].pop(0)
 
-def setup(bot):
-    bot.add_cog(mido_music(bot))
+async def setup(bot):
+    await bot.add_cog(mido_music(bot))
 
     if not hasattr(bot, "queue"):
         bot.queue = dict()
