@@ -209,5 +209,15 @@ async def setup(bot):
                 os.environ["TWITTER_API_SECRET"]
             )
         )
+    if not hasattr(bot, "twitter_media"):
+        bot.twitter_media = Twitter(
+            domain="upload.twitter.com",
+            auth=OAuth(
+                os.environ["TWITTER_ACCESS"],
+                os.environ["TWITTER_ACCESS_SECRET"],
+                os.environ["TWITTER_API"],
+                os.environ["TWITTER_API_SECRET"]
+            )
+        )
 
     await bot.add_cog(mido_slash_admin(bot))
