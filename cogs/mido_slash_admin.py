@@ -3,9 +3,11 @@ from discord import app_commands
 from discord.ext import commands
 
 import io
+import os
 import textwrap
 import traceback
 from contextlib import redirect_stdout
+from twitter import Twitter, OAuth
 from lib import utils
 
 #is_owner
@@ -23,6 +25,28 @@ class mido_slash_admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._ = None
+
+    #tweet
+    @app_commands.command(name="tweet", description="ツイートします")
+    @app_commands.describe(text="ツイートする内容")
+    @is_owner()
+    async def _tweet(self, interact: discord.Interaction, *, text: str=None):
+        if not text:
+            return await interact.response.send_message(
+                content=f"> ツイートする内容を入力してください"
+            )
+
+        try:
+            d = self.bot.twitter.statuses.update(status=text)
+        except Exception as exc:
+            return await interact.response.send_message(
+                content=f"> エラー \n```py\n{exc}\n```"
+            )
+        else:
+            return await interact.response.send_message(
+                content=f"> https://twitter.com/{d['user']['screen_name']}/status/{d['id']}",
+                ephemeral=True
+            )
 
     #shell
     @app_commands.command(name="shell", description="シェルコマンドを実行します")
@@ -176,4 +200,14 @@ class mido_slash_admin(commands.Cog):
 
 #setup
 async def setup(bot):
+    if not hasattr(bot, "twitter"):
+        bot.twitter = Twitter(
+            auth=OAuth(
+                os.environ["TWITTER_ACCESS"],
+                os.environ["TWITTER_ACCESS_SECRET"],
+                os.environ["TWITTER_API"],
+                os.environ["TWITTER_API_SECRET"]
+            )
+        )
+
     await bot.add_cog(mido_slash_admin(bot))
