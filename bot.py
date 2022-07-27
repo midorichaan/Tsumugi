@@ -37,7 +37,7 @@ class TsumugiChan(commands.AutoShardedBot):
 
         self._cogs = [
             "cogs.mido_admins", "cogs.mido_events", "cogs.mido_slash", 
-            "cogs.mido_presence", "jishaku"
+            "cogs.mido_slash_admin", "cogs.mido_presence", "jishaku"
         ]
 
     #post
