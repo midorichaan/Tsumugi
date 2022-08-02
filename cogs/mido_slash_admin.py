@@ -215,8 +215,8 @@ async def setup(bot):
             auth=OAuth(
                 os.environ["TWITTER_ACCESS"],
                 os.environ["TWITTER_ACCESS_SECRET"],
-                os.environ["TWITTER_API"],
-                os.environ["TWITTER_API_SECRET"]
+                os.environ["MIDORI_TWITTER_OAUTH"],
+                os.environ["MIDORI_TWITTER_OAUTH_SECRET"]
             )
         )
 

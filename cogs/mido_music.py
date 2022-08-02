@@ -170,68 +170,74 @@ class mido_music(commands.Cog):
             except Exception as exc:
                 return await msg.edit(content=f"> エラー \n```\n{exc}\n```")
             else:
+                if not data:
+                    return await msg.edit(content="> 動画の処理中にエラーが発生しました")
+
                 if data.get("_type", None) == "playlist":
                     try:
-                        data = await self.get_info(ctx, f"https://youtu.be/{data['entries'][0]['id']}", True)
+                        d = await self.get_info(ctx, f"https://youtu.be/{data['entries'][0]['id']}", True)
                     except Exception as exc:
                         return await msg.edit(content=f"> エラー \n```py\n{exc}\n```")
                     else:
                         if self.bot.queue.get(ctx.guild.id, None):
-                            self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + [data]
-                            return await msg.edit(content=f"> キューに{data['title']}を追加したよ！")
+                            self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + [d]
+                            return await msg.edit(content=f"> キューに{d['title']}を追加したよ！")
                         else:
-                            self.bot.queue[ctx.guild.id] = [data]
-                            await msg.edit(content=f"> {data['title']}を再生するよ！")
+                            self.bot.queue[ctx.guild.id] = [d]
+                            await msg.edit(content=f"> {d['title']}を再生するよ！")
                             self.bot.loop.create_task(self._play(ctx))
                 else:
+                    d = await self.get_info(ctx, f"https://youtu.be/{data['id']}", True)
                     if self.bot.queue.get(ctx.guild.id, None):
-                        self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + [data]
+                        self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + [d]
                         return await msg.edit(content=f"> キューに{ret['title']}を追加したよ！")
                     else:
-                        self.bot.queue[ctx.guild.id] = [data]
-                        await msg.edit(content=f"> {data['title']}を再生するよ！")
+                        self.bot.queue[ctx.guild.id] = [d]
+                        await msg.edit(content=f"> {d['title']}を再生するよ！")
                         self.bot.loop.create_task(self._play(ctx))
         else:
             try:
                 data = await self.get_data(ctx, query, False)
             except Exception as exc:
                 return await msg.edit(content=f"> エラー \n```\n{exc}\n```")
+            else: 
+                if not data:
+                    return await msg.edit(content="> 動画の処理中にエラーが発生しました")
+                lists = []
 
-            lists = []
+                #from sina () maybe only youtube
+                if data.get("_type", None) == "playlist":
+                    if len(data["entries"]) >= 5:
+                        lists.append(self.get_info(ctx, f"https://www.youtube.com/watch?v={data['entries'][0]['id']}", False))
+                    else:    
+                        for i in data["entries"]:
+                            lists.append(self.get_info(ctx, f"https://www.youtube.com/watch?v={i['id']}", False))
 
-            #from sina () maybe only youtube
-            if data.get("_type", None) == "playlist":
-                if len(data["entries"]) >= 5:
-                    lists.append(self.get_info(ctx, f"https://www.youtube.com/watch?v={data['entries'][0]['id']}", False))
-                else:    
-                    for i in data["entries"]:
-                        lists.append(self.get_info(ctx, f"https://www.youtube.com/watch?v={i['id']}", False))
+                    try:
+                        ret = [r for r in await asyncio.gather(*lists) if r]
+                    except Exception as exc:
+                        return await msg.edit(content=f"> エラー \n```\n{exc}\n```")
+                    else:
+                        if not ret:
+                            return await msg.edit(content="> 再生処理中にエラーが発生しました")
 
-                try:
-                    ret = [r for r in await asyncio.gather(*lists) if r]
-                except Exception as exc:
-                    return await msg.edit(content=f"> エラー \n```\n{exc}\n```")
+                    if self.bot.queue.get(ctx.guild.id, None):
+                        self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + ret
+                        return await msg.edit(content=f"> キューに{len(ret)}本の動画を追加したよ！")
+                    else:
+                        self.bot.queue[ctx.guild.id] = ret
+                        await msg.edit(content=f"> プレイリストからの{len(ret)}本の動画を再生するよ！")
+                        self.bot.loop.create_task(self._play(ctx))
                 else:
-                    if not ret:
-                        return await msg.edit(content="> 再生処理中にエラーが発生しました")
+                    ret = await self.get_info(ctx, f"https://www.youtube.com/watch?v={data['id']}", False)
 
-                if self.bot.queue.get(ctx.guild.id, None):
-                    self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + ret
-                    return await msg.edit(content=f"> キューに{len(ret)}本の動画を追加したよ！")
-                else:
-                    self.bot.queue[ctx.guild.id] = ret
-                    await msg.edit(content=f"> プレイリストからの{len(ret)}本の動画を再生するよ！")
-                    self.bot.loop.create_task(self._play(ctx))
-            else:
-                ret = await self.get_info(ctx, f"https://www.youtube.com/watch?v={data['id']}", False)
-
-                if self.bot.queue.get(ctx.guild.id, None):
-                    self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + [ret]
-                    return await msg.edit(content=f"> キューに{ret['title']}を追加したよ！")
-                else:
-                    self.bot.queue[ctx.guild.id] = [ret]
-                    await msg.edit(content=f"> {ret['title']}を再生するよ！")
-                    self.bot.loop.create_task(self._play(ctx))
+                    if self.bot.queue.get(ctx.guild.id, None):
+                        self.bot.queue[ctx.guild.id] = self.bot.queue[ctx.guild.id] + [ret]
+                        return await msg.edit(content=f"> キューに{ret['title']}を追加したよ！")
+                    else:
+                        self.bot.queue[ctx.guild.id] = [ret]
+                        await msg.edit(content=f"> {ret['title']}を再生するよ！")
+                        self.bot.loop.create_task(self._play(ctx))
 
     #skip
     @commands.command(name="skip", description="曲をスキップします。")
@@ -470,9 +476,9 @@ class mido_music(commands.Cog):
 
         vol = vol
         while self.bot.queue[ctx.guild.id]:
-            if self.bot.queue[ctx.guild.id][0]["type"] == "Stream":
+            if self.bot.queue[ctx.guild.id][0].get("type", "Stream") == "Stream":
                 src = discord.FFmpegPCMAudio(self.bot.queue[ctx.guild.id][0]["url"], options=ffmpeg_options)
-            elif self.bot.queue[ctx.guild.id][0]["type"] == "Download":
+            elif self.bot.queue[ctx.guild.id][0].get("type", "Download") == "Download":
                 src = discord.FFmpegPCMAudio(f"musics/{self.bot.queue[ctx.guild.id][0]['id']}", options=ffmpeg_options)
 
             try:
