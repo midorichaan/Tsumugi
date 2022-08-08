@@ -60,11 +60,11 @@ class mido_events(commands.Cog):
     #on_connect
     @commands.Cog.listener()
     async def on_connect(self) -> None:
-        self.logger.info(
+        self.bot.logger.info(
             "Successfully connected to Discord"
         )
 
-        for i in range(self.shard_count):
+        for i in range(self.bot.shard_count):
             self.bot.instance["shards"][i] = 0
         self.bot.instance["session"] = 1
 
