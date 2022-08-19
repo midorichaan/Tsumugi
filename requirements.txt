@@ -1,4 +1,7 @@
+ffmpeg
 git+https://github.com/Rapptz/discord.py
+google-api-python-client
 jishaku
 python_dotenv
 twitter
+youtube_dl
