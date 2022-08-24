@@ -69,3 +69,25 @@ class FetchUserConverter(commands.Converter):
                 return await commands.UserConverter().convert(new_ctx, argument)
             except:
                 return None
+
+#fetchuserconverter
+class FetchUserSlashConverter(commands.Converter):
+    async def convert(self, interact, argument):
+        new_interact = copy.copy(interact)
+        if hasatrr(interact, "client"):
+            new_interact.bot = interact.client
+            
+        if argument.isdigit():
+            ret = new_interact.bot.get_user(int(argument))
+            if not ret:
+                try:
+                    return await new_interact.bot.fetch_user(int(argument))
+                except:
+                    return None
+        try:
+            return await commands.MemberConverter().convert(new_ctx, argument)
+        except:
+            try:
+                return await commands.UserConverter().convert(new_ctx, argument)
+            except:
+                return None
