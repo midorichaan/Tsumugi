@@ -26,7 +26,8 @@ class PunishmentDropdown(ui.Select):
             placeholder="処罰の種類を選択してください",
             min_values=1,
             max_values=1,
-            options=options
+            options=options,
+            timeout=30.0
         )
         self._value = None
 
