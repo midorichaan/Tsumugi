@@ -26,7 +26,7 @@ class mido_slash(commands.Cog):
         ws = round(self.bot.latency * 1000, 2)
         ping = round(time.perf_counter() - msg_time, 3) * 1000
 
-        await interact.edit_original_message(
+        await interact.edit_original_response(
             content=f"> 🏓Pong! \nPing: {ping}ms \nWebSocket: {ws}ms"
         )
 
@@ -62,7 +62,7 @@ class mido_slash(commands.Cog):
 
             b = await view.wait()
             if b:
-                return await interact.response.send_message(
+                return await interact.edit_original_response(
                     content="> タイムアウトしました、最初からやり直してください"
                 )
 
@@ -70,28 +70,28 @@ class mido_slash(commands.Cog):
                 try:
                     await interact.guild.kick(target, reason=reason)
                 except:
-                    return await interact.response.send_message(
+                    return await interact.edit_original_response(
                         content=f"> メンバーをKickできませんでした"
                     )
                 else:
-                    return await interact.response.send_message(
+                    return await interact.edit_original_response(
                         content=f"> {target} ({target.id})をサーバーからKickしました"
                     )
             elif drop._value == "punish-ban":
                 try:
                     await interact.guild.ban(target, reason=reason)
                 except:
-                    return await interact.response.send_message(
+                    return await interact.edit_original_response(
                         content=f"> メンバーをBanできませんでした"
                     )
                 else:
-                    return await interact.response.send_message(
+                    return await interact.edit_original_response(
                         content=f"> {target} ({target.id})をサーバーからBanしました"
                     )
             elif drop._value == "punish-timeout":
                 pass
         except Exception as exc:
-            return await interact.response.send_message(
+            return await interact.edit_original_response(
                 content=f"> エラー \n```py\n{exc}\n```"
             )
 
