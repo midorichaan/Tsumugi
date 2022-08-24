@@ -10,6 +10,11 @@ class mido_slash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    #_check_permission
+    def _check_permission(self, interact: discord.Interaction):
+        result = []
+        return result
+
     #ping command
     @app_commands.command(
         name="ping",
@@ -37,6 +42,18 @@ class mido_slash(commands.Cog):
     )
     @app_commands.describe(target="処罰を行うユーザー", reason="理由")
     async def _punish(self, interact: discord.Interaction, target: str=None, reason: str=None):
+        check = self._check_permission(interact)
+        if str(check[0]) == "bot-missing":
+            perm = ", ".join([f"`{i}`" for i in check[1]])
+            return await interact.response.send_message(
+                content=f"> Botに{perm}の権限が不足しています"
+            )
+        if str(check[0]) == "user-missing":
+            perm = ", ".join([f"`{i}`" for i in check[1]])
+            return await interact.response.send_message(
+                content=f"> {perm}の権限が不足しています"
+            )
+
         if not target:
             return await interact.response.send_message(
                 content=f"> 対象ユーザーを指定してください"
