@@ -74,7 +74,7 @@ class FetchUserConverter(commands.Converter):
 class FetchUserSlashConverter(commands.Converter):
     async def convert(self, interact, argument):
         new_interact = copy.copy(interact)
-        if hasatrr(interact, "client"):
+        if hasattr(interact, "client"):
             new_interact.bot = interact.client
             
         if argument.isdigit():
