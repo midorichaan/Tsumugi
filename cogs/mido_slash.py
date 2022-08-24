@@ -35,7 +35,7 @@ class mido_slash(commands.Cog):
         name="punish",
         description="指定ユーザーを処罰します"
     )
-    @app_commands.describe(target="処罰を行うユーザー")
+    @app_commands.describe(target="処罰を行うユーザー", reason="理由")
     async def _punish(self, interact: discord.Interaction, target: str=None, reason: str=None):
         if not target:
             return await interact.response.send_message(
@@ -45,11 +45,10 @@ class mido_slash(commands.Cog):
             reason = None
 
         try:
-            interact.bot = interact.client or self.bot
-            target = await utils.FetchUserConverter().convert(interact, str(target))
+            target = await utils.FetchUserSlashConverter().convert(interact, str(target))
         except Exception as exc:
             return await interact.response.send_message(
-                content=f"> メンバー {target} は見つかりませんでした \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```"
             )
 
         drop = views.PunishmentDropdown()
