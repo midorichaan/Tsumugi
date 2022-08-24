@@ -52,7 +52,7 @@ class mido_slash(commands.Cog):
             )
 
         drop = views.PunishmentDropdown()
-        view = views.BasicView().add_item(drop)
+        view = views.BasicView(timeout=30.0).add_item(drop)
 
         try:
             await interact.response.send_message(
@@ -63,7 +63,8 @@ class mido_slash(commands.Cog):
             b = await view.wait()
             if b:
                 return await interact.edit_original_response(
-                    content="> タイムアウトしました、最初からやり直してください"
+                    content="> タイムアウトしました、最初からやり直してください",
+                    view=None
                 )
 
             if drop._value == "punish-kick":
@@ -71,28 +72,33 @@ class mido_slash(commands.Cog):
                     await interact.guild.kick(target, reason=reason)
                 except:
                     return await interact.edit_original_response(
-                        content=f"> メンバーをKickできませんでした"
+                        content=f"> メンバーをKickできませんでした",
+                        view=None
                     )
                 else:
                     return await interact.edit_original_response(
-                        content=f"> {target} ({target.id})をサーバーからKickしました"
+                        content=f"> {target} ({target.id})をサーバーからKickしました",
+                        view=None
                     )
             elif drop._value == "punish-ban":
                 try:
                     await interact.guild.ban(target, reason=reason)
                 except:
                     return await interact.edit_original_response(
-                        content=f"> メンバーをBanできませんでした"
+                        content=f"> メンバーをBanできませんでした",
+                        view=None
                     )
                 else:
                     return await interact.edit_original_response(
-                        content=f"> {target} ({target.id})をサーバーからBanしました"
+                        content=f"> {target} ({target.id})をサーバーからBanしました",
+                        view=None
                     )
             elif drop._value == "punish-timeout":
                 pass
         except Exception as exc:
             return await interact.edit_original_response(
-                content=f"> エラー \n```py\n{exc}\n```"
+                content=f"> エラー \n```py\n{exc}\n```",
+                view=None
             )
 
 async def setup(bot):
