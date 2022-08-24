@@ -27,7 +27,6 @@ class PunishmentDropdown(ui.Select):
             min_values=1,
             max_values=1,
             options=options,
-            timeout=30.0
         )
         self._value = None
 
@@ -38,5 +37,5 @@ class PunishmentDropdown(ui.Select):
     
 class BasicView(ui.View):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
