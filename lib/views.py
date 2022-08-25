@@ -1,9 +1,10 @@
 import discord
 from discord import ui
+from typing import Union
 
 class PunishmentDropdown(ui.Select):
 
-    def __init__(self):
+    def __init__(self, target: Union[discord.Member, discord.User]=None, *, reason: str=None):
         options = [
             discord.SelectOption(
                 label="punish-kick",
@@ -21,6 +22,8 @@ class PunishmentDropdown(ui.Select):
                 emoji="📢"
             )
         ]
+        self.target = target
+        self.reason = reason
 
         super().__init__(
             placeholder="処罰の種類を選択してください",
@@ -32,8 +35,30 @@ class PunishmentDropdown(ui.Select):
 
     #callback
     async def callback(self, interact: discord.Interaction):
-        self._value = self.values[0]
-        return self.values
+        if self.values[0] == "punish-kick":
+            try:
+                await interact.guild.kick(
+                    self.target,
+                    reason=self.reason
+                )
+            except:
+                return await interact.edit_original_response(
+                    content=f"> {self.target} をKickできませんでした",
+                    view=None
+                )
+        elif self.values[0] == "punish-ban":
+            try:
+                await interact.guild.ban(
+                    self.target,
+                    reason=self.reason
+                )
+            except:
+                return await interact.edit_original_response(
+                    content=f"> {self.target} をBanできませんでした",
+                    view=None
+                )
+        elif self.values[0] == "punish-timeout":
+            pass
     
 class BasicView(ui.View):
 
