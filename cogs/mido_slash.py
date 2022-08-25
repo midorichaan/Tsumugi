@@ -12,7 +12,25 @@ class mido_slash(commands.Cog):
 
     #_check_permission
     def _check_permission(self, interact: discord.Interaction):
-        result = []
+        result = ["", []]
+
+        gp = interact.guild.me.guild_permissions
+        if not gp.ban_members:
+            result[1].append("メンバーをBan")
+        if not gp.kick_members:
+            result[1].append("メンバーをKick")
+        if not gp.moderate_members:
+            result[1].append("メンバーをタイムアウト")
+        result[0] = "bot-missing"
+
+        mp = interact.user.guild_permissions
+        if not mp.ban_members:
+            result[1].append("メンバーをBan")
+        if not mp.kick_members:
+            result[1].append("メンバーをKick")
+        if not mp.moderate_members:
+            result[1].append("メンバーをタイムアウト")
+        result[0] = "user-missing"
         return result
 
     #ping command
