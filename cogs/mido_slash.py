@@ -60,13 +60,18 @@ class mido_slash(commands.Cog):
     )
     @app_commands.describe(target="処罰を行うユーザー", reason="理由")
     async def _punish(self, interact: discord.Interaction, target: str=None, reason: str=None):
+        if isinstance(interact.channel, discord.DMChannel):
+            return await interact.response.send_message(
+                content="> DMでは使用できません",
+            )
+
         check = self._check_permission(interact)
-        if str(check[0]) == "bot-missing":
+        if str(check[0]) == "bot-missing" and check[1] != []:
             perm = ", ".join([f"`{i}`" for i in check[1]])
             return await interact.response.send_message(
                 content=f"> Botに{perm}の権限が不足しています"
             )
-        if str(check[0]) == "user-missing":
+        if str(check[0]) == "user-missing" and check[1] != []:
             perm = ", ".join([f"`{i}`" for i in check[1]])
             return await interact.response.send_message(
                 content=f"> {perm}の権限が不足しています"
@@ -86,7 +91,7 @@ class mido_slash(commands.Cog):
                 content=f"> エラー \n```py\n{exc}\n```"
             )
 
-        drop = views.PunishmentDropdown()
+        drop = views.PunishmentDropdown(target, reason=reason)
         view = views.BasicView(timeout=30.0).add_item(drop)
 
         try:
