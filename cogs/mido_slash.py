@@ -83,35 +83,6 @@ class mido_slash(commands.Cog):
                     content="> タイムアウトしました、最初からやり直してください",
                     view=None
                 )
-
-            if drop._value == "punish-kick":
-                try:
-                    await interact.guild.kick(target, reason=reason)
-                except:
-                    return await interact.edit_original_response(
-                        content=f"> メンバーをKickできませんでした",
-                        view=None
-                    )
-                else:
-                    return await interact.edit_original_response(
-                        content=f"> {target} ({target.id})をサーバーからKickしました",
-                        view=None
-                    )
-            elif drop._value == "punish-ban":
-                try:
-                    await interact.guild.ban(target, reason=reason)
-                except:
-                    return await interact.edit_original_response(
-                        content=f"> メンバーをBanできませんでした",
-                        view=None
-                    )
-                else:
-                    return await interact.edit_original_response(
-                        content=f"> {target} ({target.id})をサーバーからBanしました",
-                        view=None
-                    )
-            elif drop._value == "punish-timeout":
-                pass
         except Exception as exc:
             return await interact.edit_original_response(
                 content=f"> エラー \n```py\n{exc}\n```",
