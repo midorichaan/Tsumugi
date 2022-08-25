@@ -31,11 +31,11 @@ class PunishmentDropdown(ui.Select):
             max_values=1,
             options=options,
         )
-        self._value = None
 
     #callback
     async def callback(self, interact: discord.Interaction):
-        if self.values[0] == "punish-kick":
+        await interact.response.defer(ephemeral=True, thinking=True)
+        if str(self.values[0]) == "punish-kick":
             try:
                 await interact.guild.kick(
                     self.target,
@@ -46,7 +46,7 @@ class PunishmentDropdown(ui.Select):
                     content=f"> {self.target} をKickできませんでした",
                     view=None
                 )
-        elif self.values[0] == "punish-ban":
+        elif str(self.values[0]) == "punish-ban":
             try:
                 await interact.guild.ban(
                     self.target,
@@ -57,7 +57,7 @@ class PunishmentDropdown(ui.Select):
                     content=f"> {self.target} をBanできませんでした",
                     view=None
                 )
-        elif self.values[0] == "punish-timeout":
+        elif str(self.values[0]) == "punish-timeout":
             pass
     
 class BasicView(ui.View):
