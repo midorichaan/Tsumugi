@@ -103,7 +103,7 @@ class TimeoutModal(ui.Modal):
     
     duration = ui.TextInput(
         custom_id="timeout-duration",
-        label="ここに期間を入力してください"
+        label="ここに期間を入力してください",
         placeholder=None,
         style=discord.TextStyle.long,
         required=True
