@@ -2,6 +2,8 @@ import discord
 from discord import ui
 from typing import Union
 
+from . import utils
+
 class PunishmentDropdown(ui.Select):
 
     def __init__(self, target: Union[discord.Member, discord.User]=None, *, reason: str=None):
