@@ -20,13 +20,18 @@ class PunishmentDropdown(ui.Select):
                 label="punish-timeout",
                 description="メンバーをタイムアウトします",
                 emoji="📢"
+            ),
+            discord.SelectOption(
+                label="punish-unban",
+                description="メンバーのBanを解除します",
+                emoji="⚙"
             )
         ]
         self.target = target
         self.reason = reason
 
         super().__init__(
-            placeholder="処罰の種類を選択してください",
+            placeholder="種類を選択してください",
             min_values=1,
             max_values=1,
             options=options,
@@ -42,7 +47,7 @@ class PunishmentDropdown(ui.Select):
                     reason=self.reason
                 )
             except:
-                return await interact.edit_original_response(
+                await interact.edit_original_response(
                     content=f"> {self.target} をKickできませんでした",
                     view=None
                 )
@@ -53,12 +58,27 @@ class PunishmentDropdown(ui.Select):
                     reason=self.reason
                 )
             except:
-                return await interact.edit_original_response(
+                await interact.edit_original_response(
                     content=f"> {self.target} をBanできませんでした",
                     view=None
                 )
         elif str(self.values[0]) == "punish-timeout":
             pass
+        elif str(self.values[0]) == "punish-unban":
+            try:
+                banlist = [i.user.id async for i in interact.guild.bans(limit=None)]
+                if self.target.id in banlist:
+                    await interact.guild.unban(self.target, reason=self.reason)
+                else:
+                    await interact.edit_original_response(
+                        content=f"> {self.target} はBanされていません",
+                        view=None
+                    )
+            except:
+                await interact.edit_original_response(
+                    content=f"> {self.target} のBanを解除できませんでした",
+                    view=None
+                )
     
 class BasicView(ui.View):
 
