@@ -92,7 +92,7 @@ class PunishmentDropdown(ui.Select):
                     content=f"> {self.target} のBanを解除できませんでした",
                     view=None
                 )
-        self.stop()
+        self.disabled = True
 
 class TimeoutModal(ui.Modal):
 
