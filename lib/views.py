@@ -72,9 +72,9 @@ class PunishmentDropdown(ui.Select):
             )
             try:
                 await interact.response.send_modal(modal)
-            except:
+            except Exception as exc:
                 await interact.edit_original_response(
-                    content=f"> 処理中にエラーが発生しました",
+                    content=f"> 処理中にエラーが発生しました \n```py\n{exc}\n```",
                     view=None
                 )
         elif str(self.values[0]) == "punish-unban":
@@ -113,9 +113,9 @@ class TimeoutModal(ui.Modal):
     async def on_submit(self, interact: discord.Interaction):
         try:
             conv = await time.ShortTime.convert(interact, str(self.duration.value))
-        except:
+        except Exception as exc:
             await interact.edit_original_response(
-                content=f"> 時刻の変換中にエラーが発生しました",
+                content=f"> 時刻の変換中にエラーが発生しました \n```py\n{exc}\n```",
                 view=None
             )
         else:
