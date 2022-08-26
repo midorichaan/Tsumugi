@@ -52,6 +52,10 @@ class PunishmentDropdown(ui.Select):
                     content=f"> {self.target} をKickできませんでした",
                     view=None
                 )
+            else:
+                await interact.edit_original_response(
+                    content=f"> {self.target} をKickしました \n理由: {self.reason}"
+                )
         elif str(self.values[0]) == "punish-ban":
             try:
                 await interact.guild.ban(
@@ -62,6 +66,10 @@ class PunishmentDropdown(ui.Select):
                 await interact.edit_original_response(
                     content=f"> {self.target} をBanできませんでした",
                     view=None
+                )
+            else:
+                await interact.edit_original_response(
+                    content=f"> {self.target} をBanしました \n理由: {self.reason}"
                 )
         elif str(self.values[0]) == "punish-timeout":
             modal = TimeoutModal(
@@ -90,6 +98,10 @@ class PunishmentDropdown(ui.Select):
                 await interact.edit_original_response(
                     content=f"> {self.target} のBanを解除できませんでした",
                     view=None
+                )
+            else:
+                await interact.edit_original_response(
+                    content=f"> {self.target} のBanを解除しました \n理由: {self.reason}"
                 )
         self.disabled = True
 
