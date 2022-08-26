@@ -2,7 +2,7 @@ import discord
 from discord import ui
 from typing import Union
 
-from . import utils
+from . import time
 
 class PunishmentDropdown(ui.Select):
 
@@ -111,7 +111,7 @@ class TimeoutModal(ui.Modal):
 
     async def on_submit(self, interact: discord.Interaction):
         try:
-            conv = await utils.TimeConverter().convert(interact, str(self.duration.value))
+            conv = await time.TimeConverter().convert(interact, str(self.duration.value))
         except:
             await interact.edit_original_response(
                 content=f"> 時刻の変換中にエラーが発生しました",
