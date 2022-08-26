@@ -63,7 +63,18 @@ class PunishmentDropdown(ui.Select):
                     view=None
                 )
         elif str(self.values[0]) == "punish-timeout":
-            pass
+            modal = TimeoutModal(
+                title="タイムアウト期間",
+                member=self.target,
+                reason=self.reason
+            )
+            try:
+                await interact.response.send_modal(modal)
+            except:
+                await interact.edit_original_response(
+                    content=f"> 処理中にエラーが発生しました",
+                    view=None
+                )
         elif str(self.values[0]) == "punish-unban":
             try:
                 banlist = [i.user.id async for i in interact.guild.bans(limit=None)]
@@ -81,7 +92,13 @@ class PunishmentDropdown(ui.Select):
                 )
         self.stop()
 
-class TimeoutModal(ui.Modal, title="タイムアウト時間"):
+class TimeoutModal(ui.Modal):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.member = kwargs.get("member")
+        self.reason = kwargs.get("reason")
+    
     duration = ui.TextInput(
         custom_id="timeout-duration",
         label="ここに期間を入力してください"
@@ -91,10 +108,38 @@ class TimeoutModal(ui.Modal, title="タイムアウト時間"):
     )
 
     async def on_submit(self, interact: discord.Interaction):
-        pass
+        try:
+            conv = await utils.TimeConverter().convert(interact, str(self.duration.value))
+        except:
+            await interact.edit_original_response(
+                content=f"> 時刻の変換中にエラーが発生しました",
+                view=None
+            )
+        else:
+            try:
+                await self.member.timeout(conv, reason=self.reason)
+            except:
+                await interact.edit_original_response(
+                    content=f"> メンバーのタイムアウト中にエラーが発生しました",
+                    view=None
+                )
+            else:
+                await interact.edit_original_message(
+                    content=f"> {self.member} をタイムアウトしました \n期間: {discord.utils.format_dt(conv, style='F')}"
+                )
+        finally:
+            self.stop()
 
     async def on_error(self, interact: discord.Interaction, error: Exception):
-        pass
+        try:
+            await interact.edit_original_response(
+                content=f"> エラー \n```py\n{error}\n```",
+                view=None
+            )
+        except:
+            pass
+        finally:
+            self.stop()
     
 class BasicView(ui.View):
 
