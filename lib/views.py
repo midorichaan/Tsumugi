@@ -97,9 +97,10 @@ class PunishmentDropdown(ui.Select):
 class TimeoutModal(ui.Modal):
 
     def __init__(self, *args, **kwargs):
+        self.member = kwargs.pop("member")
+        self.reason = kwargs.pop("reason")
+
         super().__init__(*args, **kwargs)
-        self.member = kwargs.get("member")
-        self.reason = kwargs.get("reason")
     
     duration = ui.TextInput(
         custom_id="timeout-duration",
