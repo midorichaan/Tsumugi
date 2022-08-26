@@ -41,7 +41,6 @@ class PunishmentDropdown(ui.Select):
 
     #callback
     async def callback(self, interact: discord.Interaction):
-        await interact.response.defer(ephemeral=True, thinking=True)
         if str(self.values[0]) == "punish-kick":
             try:
                 await interact.guild.kick(
