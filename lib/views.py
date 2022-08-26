@@ -111,7 +111,7 @@ class TimeoutModal(ui.Modal):
 
     async def on_submit(self, interact: discord.Interaction):
         try:
-            conv = await time.TimeConverter().convert(interact, str(self.duration.value))
+            conv = await time.ShortTime.convert(interact, str(self.duration.value))
         except:
             await interact.edit_original_response(
                 content=f"> 時刻の変換中にエラーが発生しました",
