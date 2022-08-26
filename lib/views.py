@@ -79,6 +79,22 @@ class PunishmentDropdown(ui.Select):
                     content=f"> {self.target} のBanを解除できませんでした",
                     view=None
                 )
+        self.stop()
+
+class TimeoutModal(ui.Modal, title="タイムアウト時間"):
+    duration = ui.TextInput(
+        custom_id="timeout-duration",
+        label="ここに期間を入力してください"
+        placeholder=None,
+        style=discord.TextStyle.long,
+        required=True
+    )
+
+    async def on_submit(self, interact: discord.Interaction):
+        pass
+
+    async def on_error(self, interact: discord.Interaction, error: Exception):
+        pass
     
 class BasicView(ui.View):
 
