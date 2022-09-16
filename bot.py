@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands, tasks
 
 import aiohttp
+import asyncio
 import os
 from dotenv import load_dotenv
 from lib import utils
@@ -71,8 +72,8 @@ class TsumugiChan(commands.AutoShardedBot):
         else:
             await self.post_api(1)
 
-    #overwrite run
-    def run(self) -> None:
+    #overwrite start
+    async def run(self) -> None:
         token = os.environ.get("TOKEN", None)
         if not token:
             self.logger.critical(
@@ -81,7 +82,7 @@ class TsumugiChan(commands.AutoShardedBot):
             return
         else:
             try:
-                super().run(token)
+                await super().start(token)
             except Exception as exc:
                 self.logger.critical(f"RUNNER: {exc}")
             else:
@@ -127,7 +128,7 @@ class TsumugiChan(commands.AutoShardedBot):
         self.logger.info("RUNNER: Enabled tsumugi discordbot")
 
 #run
-if __name__ == "__main__":
+async def main():
     #logger
     basicConfig(
         level=INFO,
@@ -138,12 +139,16 @@ if __name__ == "__main__":
     #vars
     intents = discord.Intents.all()
 
-    #instance
-    bot = TsumugiChan(
-        logger=logger,
-        intents=intents,
-        command_prefix=os.environ.get("PREFIX", "."),
-        shard_count=2,
-        status=discord.Status.idle
-    )
-    bot.run()
+    #run
+    async with aiohttp.ClientSession() as session:
+        async with TsumugiChan(
+            logger=logger,
+            intents=intents,
+            command_prefix=os.environ.get("PREFIX", "."),
+            shard_count=2,
+            status=discord.Status.idle
+        ) as bot:
+            await bot.start()
+
+if __name__ == "__main__":
+    asyncio.run(main())
