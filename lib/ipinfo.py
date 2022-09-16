@@ -24,10 +24,9 @@ class Route:
     def __init__(self, method: str, path: str, **parameters: Any) -> None:
         self.path: str = path
         self.method: str = method
-        url = self.BASE + self.path
+        self.url = self.BASE + self.path
         if parameters:
-            url = url.format_map({k: _uriquote(v) if isinstance(v, str) else v for k, v in parameters.items()})
-        self.url: str = url
+            self.url = self.url.format_map({k: _uriquote(v) if isinstance(v, str) else v for k, v in parameters.items()})
 
 class APIClient(object):
 
