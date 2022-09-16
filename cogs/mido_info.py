@@ -30,7 +30,7 @@ class mido_info(commands.Cog):
             v = f"""ASN: {req['asn']['asn']}
             ASN Name: {req['asn']['name']}
             ASN Domain: {req['asn']['domain']}
-            ASN Route: {req['asn']['route']}
+            ASN Route: {str(req['asn']['route'])}
             ASN Type: {req['asn']['type']}
             """
             e.add_field(name="ASN", value=v, inline=False)
@@ -44,15 +44,15 @@ class mido_info(commands.Cog):
             Tor: {'Yes' if req['privacy']['tor'] else 'No'}
             Relay: {'Yes' if req['privacy']['relay'] else 'No'}
             Hosting: {'Yes' if req['privacy']['hosting'] else 'No'}
-            Service: {'unknown' if not req['privacy']['service'] else req['privacy']['service']}
+            Service: {req['privacy']['service'] if req['privacy']['service'] else 'Unknown'}
             """
             e.add_field(name="Privacy", value=v, inline=False)
             v = f"""Address: {req['abuse']['address']}
             Country: {req['abuse']['country']}
             Email: {req['abuse']['email']}
             Name: {req['abuse']['name']}
-            Network: {req['abuse']['network']}
-            Phone: {req['abuse']['phone']}
+            Network: {str(req['abuse']['network'])}
+            Phone: {str(req['abuse']['phone'])}
             """
             e.add_field(name="Abuse", value=v, inline=False)
             return await msg.edit(content=None, embed=e)
