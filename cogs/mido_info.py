@@ -51,8 +51,8 @@ class mido_info(commands.Cog):
             Country: {req['abuse']['country']}
             Email: {req['abuse']['email']}
             Name: {req['abuse']['name']}
-            Network: {req['abuse']['network']]}
-            Phone: {req['abuse']['phone']]}
+            Network: {req['abuse']['network']}
+            Phone: {req['abuse']['phone']}
             """
             e.add_field(name="Abuse", value=v, inline=False)
             return await msg.edit(content=None, embed=e)
