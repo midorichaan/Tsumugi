@@ -72,10 +72,16 @@ class APIClient(object):
             raise e
 
     #get_info
-    async def get_info(self, ipaddr: str) -> Dict:
+    #async def get_info(self, ipaddr: str) -> Dict:
+    #    route = Route("GET", f"/{ipaddr}", token=self.token)
+    #    request = await self.request(route)
+    #    return Info(request)
+
+    #get_data
+    async def get_data(self, ipaddr: str) -> Dict:
         route = Route("GET", f"/{ipaddr}", token=self.token)
         request = await self.request(route)
-        return Info(request)
+        return request
 
 class Info:
 
