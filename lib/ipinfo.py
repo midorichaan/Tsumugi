@@ -21,7 +21,7 @@ async def json_or_text(response: aiohttp.ClientResponse) -> Union[Dict[str, Any]
 class Route:
     BASE: ClassVar[str] = "https://ipinfo.io"
 
-    def __init__(self, method: str, path: str, *, **parameters: Any) -> None:
+    def __init__(self, method: str, path: str, **parameters: Any) -> None:
         self.path: str = path
         self.method: str = method
         url = self.BASE + self.path
