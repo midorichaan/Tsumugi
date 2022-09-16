@@ -20,6 +20,7 @@ class TsumugiChan(commands.AutoShardedBot):
 
     def __init__(self, *args, **kwargs) -> None:
         self.logger = kwargs.get("logger", None)
+        self.session = kwargs.get("session", None)
         super().__init__(*args, **kwargs)
 
         self.instance = {
@@ -49,18 +50,17 @@ class TsumugiChan(commands.AutoShardedBot):
         }
 
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.request(
-                    "POST",
-                    "https://api.midorichan.cf/v1/service/status",
-                    headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
-                    json=d
-                ) as request:
-                    data = await discord.http.json_or_text(request)
-                    if request.status == 200:
-                        self.logger.info(f"API: Updated service status - {data}")
-                    else:
-                        self.logger.warning(f"API: Service status update failed - {data}")
+            async with session.request(
+                "POST",
+                "https://api.midorichan.cf/v1/service/status",
+                headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
+                json=d
+            ) as request:
+                data = await discord.http.json_or_text(request)
+                if request.status == 200:
+                    self.logger.info(f"API: Updated service status - {data}")
+                else:
+                    self.logger.warning(f"API: Service status update failed - {data}")
         except Exception as exc:
             self.logger.warning(f"ERROR: {exc}")
 
@@ -73,7 +73,7 @@ class TsumugiChan(commands.AutoShardedBot):
             await self.post_api(1)
 
     #overwrite start
-    async def run(self) -> None:
+    async def start(self) -> None:
         token = os.environ.get("TOKEN", None)
         if not token:
             self.logger.critical(
@@ -146,7 +146,8 @@ async def main():
             intents=intents,
             command_prefix=os.environ.get("PREFIX", "."),
             shard_count=2,
-            status=discord.Status.idle
+            status=discord.Status.idle,
+            session=session
         ) as bot:
             await bot.start()
 
