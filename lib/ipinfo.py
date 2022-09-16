@@ -9,7 +9,7 @@ from typing import (
 from urllib.parse import quote as _uriquote
 
 #json_or_text
-async def json_pr_text(response: aiohttp.ClientResponse) -> Union[Dict[str, Any], str]:
+async def json_or_text(response: aiohttp.ClientResponse) -> Union[Dict[str, Any], str]:
     text = await response.text(encoding="utf-8")
     try:
         if response.headers["content-type"] == "application/json":
