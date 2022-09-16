@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+import json
 from lib import utils
 
 class mido_info(commands.Cog):
@@ -18,6 +19,7 @@ class mido_info(commands.Cog):
 
         try:
             req = await self.bot.ipinfo.get_data(ipaddr)
+            req = json.loads(req)
         except Exception as exc:
             return await msg.edit(content=f"> エラー \n```py\n{exc}\n```")
         else:
