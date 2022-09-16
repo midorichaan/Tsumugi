@@ -90,6 +90,16 @@ class TsumugiChan(commands.AutoShardedBot):
                     "RUNNER: Enabling tsumugi discordbot..."
                 )
 
+    #close
+    async def close(self):
+        self.logger.info("RUNNER: Disabling tsumugi discordbot...")
+        await self.post_api(0)
+
+        try:
+            await super().close()
+        except Exception as exc:
+            self.logger.error(f"RUNNER: Failed to close Client : {exc}")
+
     #setup_hook
     async def setup_hook(self):
         self.logger.info("SYSTEM: Setting up...")
