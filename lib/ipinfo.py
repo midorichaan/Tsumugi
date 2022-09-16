@@ -19,16 +19,13 @@ async def json_or_text(response: aiohttp.ClientResponse) -> Union[Dict[str, Any]
     return text
 
 class Route:
-    BASE: ClassVar[str] = "https://ipinfo.io"
+    BASE: ClassVar[str] = "https://ipinfo.io{ipaddr}?token={token}"
 
-    def __init__(self, method: str, path: str, **parameters: Any) -> None:
+    def __init__(self, method: str, path: str, token: str) -> None:
         self.path: str = path
         self.method: str = method
-        self.parameters = parameters
-        url = self.BASE + self.path
-        if parameters:
-            url = url.format_map({k: _uriquote(v) if isinstance(v, str) else v for k, v in parameters.items()})
-        self.url: str = url
+        self.token: str = token
+        self.url: str = self.BASE.format_map({"ipaddr": self.path, "token": self.token})
 
 class APIClient(object):
 
