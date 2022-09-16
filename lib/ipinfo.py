@@ -27,7 +27,7 @@ class Route:
         self.parameters = parameters
         url = self.BASE + self.path
         if parameters:
-            url = self.url.format_map({k: _uriquote(v) if isinstance(v, str) else v for k, v in parameters.items()})
+            url = url.format_map({k: _uriquote(v) if isinstance(v, str) else v for k, v in parameters.items()})
         self.url: str = url
 
 class APIClient(object):
