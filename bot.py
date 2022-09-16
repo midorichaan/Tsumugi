@@ -50,7 +50,7 @@ class TsumugiChan(commands.AutoShardedBot):
         }
 
         try:
-            async with session.request(
+            async with self.session.request(
                 "POST",
                 "https://api.midorichan.cf/v1/service/status",
                 headers={"Authorization": f"Bearer {os.environ['MIDORI_TOKEN']}"},
