@@ -7,6 +7,11 @@ from discord.ext import commands
 
 #check_hierarchy
 def check_hierarchy(ctx, target):
+    if not isinstance(target, discord.Member):
+        return False
+
+    if not ctx.author.guild_permissions >= target.guild_permissions:
+        return False
     return True
 
 #get_status
