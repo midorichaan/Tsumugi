@@ -5,6 +5,10 @@ import re
 import subprocess
 from discord.ext import commands
 
+#check_hierarchy
+def check_hierarchy(ctx, target):
+    return True
+
 #get_status
 def get_status(member):
     status = str(member.status)
