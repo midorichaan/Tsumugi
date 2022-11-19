@@ -328,7 +328,7 @@ class mido_music(commands.Cog):
 
                 e = discord.Embed(title="🎶Now Playing", color=self.bot.color, timestamp=ctx.message.created_at)
                 e.set_thumbnail(url=queue["thumbnail"])
-                e.set_footer(text=f"Requested by {self.bot.get_user(queue['request'])}", icon_url=self.bot.get_user(queue["request"]).avatar_url_as(static_format="png"))
+                e.set_footer(text=f"Requested by {self.bot.get_user(queue['request'])}", icon_url=self.bot.get_user(queue["request"]).avatar)
                 e.add_field(name="再生中の曲", value=f"[{queue['title']}]({queue['webpage_url']})")
                 e.add_field(name="アップロードチャンネル", value=f"[{queue['uploader']}]({queue['uploader_url']})")
                 return await msg.edit(content=None, embed=e)
