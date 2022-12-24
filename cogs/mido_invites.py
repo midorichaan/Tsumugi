@@ -9,7 +9,7 @@ class meta_invites(commands.CogMeta):
         self.group_description = "招待関連の設定です"
 
 @app_commands.guild_only()
-class mido_invites(commands.GroupCog, metaclass=meta_invites):
+class mido_invites(commands.GroupCog):
 
     def __init__(self, bot):
         self.bot = bot
