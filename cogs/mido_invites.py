@@ -2,14 +2,12 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-class meta_invites(commands.CogMeta):
+class meta_invites(commands.CogMeta, group_name="invites", group_description="招待関連の設定です"):
     def __init__(self):
         super().__init__()
-        self.group_name = "invites"
-        self.group_description = "招待関連の設定です"
 
 @app_commands.guild_only()
-class mido_invites(commands.GroupCog):
+class mido_invites(commands.GroupCog, metaclass=meta_invites):
 
     def __init__(self, bot):
         self.bot = bot
