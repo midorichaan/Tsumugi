@@ -49,9 +49,9 @@ class mido_punish(commands.Cog):
         try:
             await ctx.guild.ban(target, reason=reason)
         except Exception as exc:
-            return await ctx.reply_or_send(ctx, content=f"> エラー \n```py\n{exc}\n```")
+            return await utils.reply_or_send(ctx, content=f"> エラー \n```py\n{exc}\n```")
         else:
-            return await ctx.reply_or_send(ctx, content=f"> {target} をこのサーバーからBanしました。 \n理由: {reason}")
+            return await utils.reply_or_send(ctx, content=f"> {target} をこのサーバーからBanしました。 \n理由: {reason}")
 
     #kick
     @commands.command(
