@@ -31,11 +31,11 @@ class mido_invites(commands.GroupCog, group_name="invites", group_description="�
     )
     @app_commands.guild_only()
     async def _toggle_invite(self, interact: discord.Interaction, value: bool=None, reason: str=None):
-        if not check_cp(interact.guild.me):
+        if not self.check_cp(interact.guild.me):
             return await interact.response.send_message(
                 content="> 権限が不足しています"
             )
-        if not check_cp(interact.user):
+        if not self.check_cp(interact.user):
             return await interact.response.send_message(
                 content="> 権限が不足しています"
             )
