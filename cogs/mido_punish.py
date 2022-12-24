@@ -86,5 +86,45 @@ class mido_punish(commands.Cog):
         else:
             return await utils.reply_or_send(ctx, content=f"> {target} をこのサーバーからKickしました。 \n理由: {reason}")
 
+    #timeout
+    @commands.command(
+        name="timeout",
+        description="メンバーをタイムアウトします"
+    )
+    @commands.has_permissions(
+        kick_members=True,
+        ban_members=True,
+        moderate_members=True
+    )
+    @commands.bot_has_permissions(
+        kick_members=True,
+        ban_members=True,
+        moderate_members=True
+    )
+    async def _timeout(
+        self, 
+        ctx: commands.Context, 
+        target: utils.FetchUserConverter=None, 
+        duration: utils.TimeConverter=None,
+        *,
+        reason: str=None
+    ):
+        if not target:
+            return await utils.reply_or_send(ctx, content=f"> ユーザーを指定してください。")
+
+        if not utils.check_hierarchy(ctx, target):
+            return await utils.reply_or_send(ctx, content=f"> このユーザーはTimeoutできません。")
+
+        if not reason:
+            reason = "理由なし"
+        reason = f"{ctx.author}: {reason}"
+
+        try:
+            await target.timeout(duration, reason=reason)
+        except Exception as exc:
+            return await utils.reply_or_send(ctx, content=f"> エラー \n```py\n{exc}\n```")
+        else:
+            return await utils.reply_or_send(ctx, content=f"> {target} をこのサーバーからKickしました。 \n理由: {reason}")
+
 async def setup(bot):
     await bot.add_cog(mido_punish(bot))
