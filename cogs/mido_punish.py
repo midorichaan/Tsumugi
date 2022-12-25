@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+from lib import time
 from lib import utils
 
 class mido_punish(commands.Cog):
@@ -105,7 +106,7 @@ class mido_punish(commands.Cog):
         self, 
         ctx: commands.Context, 
         target: utils.FetchUserConverter=None, 
-        duration: utils.ShortTime=None,
+        duration: time.ShortTime=None,
         *,
         reason: str=None
     ):
