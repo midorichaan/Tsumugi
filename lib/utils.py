@@ -63,7 +63,7 @@ async def run_process(ctx, command):
 class FetchUserConverter(commands.Converter):
     async def convert(self, ctx, argument):
         new_ctx = copy.copy(ctx)
-        if hasatrr(ctx, "client"):
+        if hasattr(ctx, "client"):
             new_ctx.bot = ctx.client
             
         if argument.isdigit():
