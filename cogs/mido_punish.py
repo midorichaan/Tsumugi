@@ -105,7 +105,7 @@ class mido_punish(commands.Cog):
         self, 
         ctx: commands.Context, 
         target: utils.FetchUserConverter=None, 
-        duration: utils.TimeConverter=None,
+        duration: utils.ShortTime=None,
         *,
         reason: str=None
     ):
